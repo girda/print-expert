@@ -7,7 +7,7 @@ import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.co
 import { SiteLayoutComponent } from './shared/layouts/site-layout/site-layout.component';
 
 import {LoginPageComponent} from './login-page/login-page.component';
-import {PrintersPageComponent} from './user-page/printers-page.component';
+import {PrintersPageComponent} from './printers-page/printers-page.component';
 
 const routes: Routes = [{
   path: '',

@@ -19,7 +19,7 @@ import {AuthLayoutComponent} from './shared/layouts/auth-layout/auth-layout.comp
 import {SiteLayoutComponent} from './shared/layouts/site-layout/site-layout.component';
 import {MatInputModule} from '@angular/material/input';
 import {AdminPageComponent} from './admin-page/admin-page.component';
-import {PrintersPageComponent} from './user-page/printers-page.component';
+import {PrintersPageComponent} from './printers-page/printers-page.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
 
