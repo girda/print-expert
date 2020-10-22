@@ -1,0 +1,49 @@
+<mat-card>
+  <form
+    [formGroup]="form"
+    class="form"
+  >
+    <h2 class="form__title">Увійти до системи</h2>
+    <mat-form-field class="form__row">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        placeholder="Email"
+      >
+      <mat-error *ngIf="form.get('email').invalid && form.get('password').touched">
+        <mat-error *ngIf="form.get('email').errors['required']">Email не повинен бути порожнім</mat-error>
+        <mat-error *ngIf="form.get('email').errors['email']">Введіть коректний email адресу</mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="form__row">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        placeholder="Password"
+      >
+      <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
+        <mat-error *ngIf="form.get('password').errors['required']">Пароль не повинен бути порожнім</mat-error>
+        <mat-error
+          *ngIf="form.get('password').errors['minlength'] && form.get('password').errors['minlength']['requiredLength']">
+          Пароль повинен бути більше {{form.get('password').errors['minlength']['requiredLength']}} символів.
+          Зараз {{form.get('password').errors['minlength']['actualLength']}}.
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form__btn">
+      <button
+        type="submit"
+        [disabled]="form.invalid || form.disabled"
+        mat-raised-button
+        color="primary"
+      >
+        Увійти
+      </button>
+    </div>
+
+  </form>
+</mat-card>

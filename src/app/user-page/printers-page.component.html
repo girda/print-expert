@@ -1,0 +1,27 @@
+<div class="printers">
+  <div class="container">
+    <div class="printers__in">
+
+      <div class="printers__filters">
+        <form [formGroup]="formFilters">
+          <mat-form-field>
+            <mat-select formControlName="client" placeholder="Клієнт">
+              <mat-option>
+                <ngx-mat-select-search
+                  placeholderLabel="Пошук"
+                  [formControl]="searchClient"
+                  ngModel
+                  (ngModelChange)="filterMyOptions($event)"
+                ></ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let client of clients" [value]="client">
+                {{client.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button (click)="bla()">TEST</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
