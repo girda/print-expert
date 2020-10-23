@@ -22,6 +22,7 @@ import {AdminPageComponent} from './admin-page/admin-page.component';
 import {PrintersPageComponent} from './printers-page/printers-page.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
+import { SelectSearchComponent } from './shared//components/select-search/select-search.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {MatSelectModule} from '@angular/material/select';
     AuthLayoutComponent,
     SiteLayoutComponent,
     AdminPageComponent,
-    PrintersPageComponent
+    PrintersPageComponent,
+    SelectSearchComponent
   ],
   imports: [
     BrowserModule,
