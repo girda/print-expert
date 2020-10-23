@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-select-search',
@@ -8,8 +8,10 @@ import { FormControl } from '@angular/forms';
 })
 export class SelectSearchComponent implements OnInit {
 
-  @Input() opionts: any[];
+  @Input() options: any[];
   @Input() placeholder: string;
+  @Input() formGroup: FormGroup;
+  @Input() controlName: string;
 
   search: FormControl = new FormControl();
 
@@ -18,7 +20,7 @@ export class SelectSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  filterMyOptions(event) {
+  filterMyOptions(event): void {
     console.log(event);
     // console.log(this.formFilters.get('searchClient').value);
   }

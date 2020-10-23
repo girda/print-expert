@@ -1,5 +1,5 @@
-<mat-form-field>
-    <mat-select formControlName="client" placeholder="{{placeholder}}">
+<mat-form-field [formGroup]="formGroup">
+    <mat-select formControlName="{{controlName}}" placeholder="{{placeholder}}">
       <mat-option>
         <ngx-mat-select-search
           placeholderLabel="Пошук"
@@ -8,8 +8,8 @@
           (ngModelChange)="filterMyOptions($event)"
         ></ngx-mat-select-search>
       </mat-option>
-      <mat-option *ngFor="let opiont of opionts" [value]="opiont">
-        {{opiont.name}}
+      <mat-option *ngFor="let option of options" [value]="option">
+        {{option.name}}
       </mat-option>
     </mat-select>
   </mat-form-field>

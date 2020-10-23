@@ -2,12 +2,81 @@
   <div class="container">
     <div class="printers__in">
 
+      <h2 class="printers__title">Заголовок</h2>
       <div class="printers__filters">
-        <form [formGroup]="formFilters">
-          <app-select-search></app-select-search>
-          <button (click)="bla()">TEST</button>
+        <form [formGroup]="formFilters" (ngSubmit)="submit($event)" class="filters">
+
+          <app-select-search
+            placeholder="Клієнт"
+            controlName="client"
+            [formGroup]="formFilters"
+            [options]="clients"
+          ></app-select-search>
+
+          <app-select-search
+            placeholder="Місто"
+            controlName="city"
+            [options]="cities"
+            [formGroup]="formFilters"
+          ></app-select-search>
+
+          <app-select-search
+            placeholder="Відділ"
+            controlName="department"
+            [options]="departments"
+            [formGroup]="formFilters"
+          ></app-select-search>
+
+          <app-select-search
+            placeholder="Принтери"
+            controlName="printers"
+            [options]="printers"
+            [formGroup]="formFilters"
+          ></app-select-search>
+
+          <div class="filters__btn">
+            <button
+              type="submit"
+              [disabled]="formFilters.invalid || formFilters.disabled"
+              mat-raised-button
+              color="primary"
+            >
+              Знайти
+            </button>
+          </div>
         </form>
       </div>
-    </div>
+
+
+        <div *ngIf="gridService.isReadyTable; else loaderAgGrid">
+
+<!--          <div class="clear-filters">-->
+<!--            <button-->
+<!--              (click)="clearFilters()"-->
+<!--              class="btn"-->
+<!--            >-->
+<!--              очистить фильтры-->
+<!--            </button>-->
+<!--          </div>-->
+
+          <ag-grid-angular
+            style="width: 100%; height: 600px;"
+            class="ag-theme-alpine"
+            [gridOptions]="gridService.gridOptions"
+          >
+          </ag-grid-angular>
+
+
+
+        </div>
+
+        <ng-template #loaderAgGrid>
+          <div class="center">
+            Loading...
+          </div>
+        </ng-template>
+
+      </div>
+
   </div>
 </div>

@@ -23,6 +23,7 @@ import {PrintersPageComponent} from './printers-page/printers-page.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
 import { SelectSearchComponent } from './shared//components/select-search/select-search.component';
+import {AgGridModule} from 'ag-grid-angular';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { SelectSearchComponent } from './shared//components/select-search/select
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    AgGridModule
   ],
   providers: [],
   bootstrap: [AppComponent]
