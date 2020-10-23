@@ -53,7 +53,7 @@ export class PrintersPageComponent implements OnInit {
         headerName: 'Город',
         field: 'city',
         headerTooltip: 'Город',
-        filter: true,
+        // filter: true,
         // floatingFilter: true,
         // floatingFilterComponentParams: {suppressFilterButton: true}
       },
@@ -94,25 +94,25 @@ export class PrintersPageComponent implements OnInit {
             headerName: 'Black',
             headerClass: 'grid-cell-centered bg-black',
             field: 'quantity_black',
-            width: 100
+            width: 70
           },
           {
             headerName: 'CN',
             headerClass: 'grid-cell-centered bg-cyan',
             field: 'quantity_cn',
-            width: 100
+            width: 70
           },
           {
             headerName: 'MG',
             headerClass: 'grid-cell-centered bg-magenta',
             field: 'quantity_mg',
-            width: 100
+            width: 70
           },
           {
             headerName: 'YI',
             headerClass: 'grid-cell-centered bg-yellow',
             field: 'quantity_yi',
-            width: 100
+            width: 70
           },
         ]
       },

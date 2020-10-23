@@ -47,15 +47,15 @@ export class AgGridService {
           serial_number: 'Serial number',
           ip: 'IP',
           page_count: 'Page count',
-          quantity_black: 'Quantity black',
-          quantity_cn: 'Quantity CN',
-          quantity_mg: 'Quantity MG',
-          quantity_yi: 'Quantity YI',
-          average_coverage_bl: 'Average coverage black',
-          average_coverage_cn: 'Average coverage CN',
-          average_coverage_mg: 'Average coverage MG',
-          average_coverage_yi: 'Average coverage YI',
-          average_coverage_all: 'Average coverage ALL'
+          quantity_black: '30%',
+          quantity_cn: '30%',
+          quantity_mg: '30%',
+          quantity_yi: '30%',
+          average_coverage_bl: '30%',
+          average_coverage_cn: '30%',
+          average_coverage_mg: '30%',
+          average_coverage_yi: '30%',
+          average_coverage_all: '30%'
         }
       ]);
       // this.gridOptions.api.sizeColumnsToFit();
