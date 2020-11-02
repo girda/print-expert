@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {AgGridService} from '../shared/services/ag-grid.sevice';
 import {environment} from '../../environments/environment';
-
+import { Module } from 'ag-grid-community';
+import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
 @Component({
   selector: 'app-user-page',
   templateUrl: './printers-page.component.html',
@@ -11,13 +12,24 @@ import {environment} from '../../environments/environment';
 export class PrintersPageComponent implements OnInit {
 
   formFilters: FormGroup;
+  
 
   agGridIsReady = false;
+  modules = [ExcelExportModule]
+  range: FormGroup;
 
   clients: any[] = [{name: 'Клієнт 1', id: 1}, {name: 'Клієнт 2', id: 2}, {name: 'Клієнт 3', id: 3}];
   cities: any[] = [{name: 'Місто 1', id: 1}, {name: 'Місто 2', id: 2}, {name: 'Місто 3', id: 3}];
   departments: any[] = [{name: 'Відділ 1', id: 1}, {name: 'Відділ 2', id: 2}, {name: 'Відділ 3', id: 3}];
   printers: any[] = [{name: 'Принтер 1', id: 1}, {name: 'Принтер 2', id: 2}, {name: 'Принтер 3', id: 3}];
+
+  filters = [
+    {placeholder: 'Клієнт', controlName: 'client', options: this.clients},
+    {placeholder: 'Місто', controlName: 'city', options: this.clients},
+    {placeholder: 'Відділ', controlName: 'department', options: this.clients},
+    {placeholder: 'Принтери', controlName: 'printers', options: this.clients},
+  ]
+
 
   constructor(public gridService: AgGridService) {
     this.gridService.gridOptions.columnDefs = this.createColumnDefs();
@@ -30,7 +42,11 @@ export class PrintersPageComponent implements OnInit {
       client: new FormControl(null),
       city: new FormControl(null),
       department: new FormControl(null),
-      printers: new FormControl()
+      printers: new FormControl(null), 
+      range: this.range = new FormGroup({
+        start: new FormControl(),
+        end: new FormControl()
+      })
     });
   }
 
@@ -40,6 +56,20 @@ export class PrintersPageComponent implements OnInit {
     console.log(event);
     console.log(this.formFilters.controls);
     console.log(this.formFilters.value);
+  }
+
+  onBtnExportCSV() {
+    this.gridService.gridOptions.api.exportDataAsCsv();
+  }
+
+  onBtnExportExcle() {
+    this.gridService.gridOptions.api.exportDataAsExcel();
+  }
+
+  getAllRows() {
+    let rowData = [];
+    this.gridService.gridOptions.api.forEachNode(node => rowData.push(node.data));
+    console.log(rowData);
   }
 
   createColumnDefs(): any[] {
@@ -53,7 +83,7 @@ export class PrintersPageComponent implements OnInit {
         headerName: 'Город',
         field: 'city',
         headerTooltip: 'Город',
-        // filter: true,
+        filter: true,
         // floatingFilter: true,
         // floatingFilterComponentParams: {suppressFilterButton: true}
       },
@@ -78,7 +108,8 @@ export class PrintersPageComponent implements OnInit {
       {
         headerName: 'IP',
         field: 'ip',
-        headerTooltip: 'IP'
+        headerTooltip: 'IP',
+        width: 70
       },
       {
         headerName: 'Количество распечатанных страниц',
@@ -94,26 +125,69 @@ export class PrintersPageComponent implements OnInit {
             headerName: 'Black',
             headerClass: 'grid-cell-centered bg-black',
             field: 'quantity_black',
-            width: 70
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'CN',
             headerClass: 'grid-cell-centered bg-cyan',
             field: 'quantity_cn',
-            width: 70
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'MG',
             headerClass: 'grid-cell-centered bg-magenta',
             field: 'quantity_mg',
-            width: 70
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'YI',
             headerClass: 'grid-cell-centered bg-yellow',
             field: 'quantity_yi',
-            width: 70
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
+        ]
+      },
+      {
+        headerName: 'Ресурс картриджа',
+        headerClass: 'grid-cell-centered bg-purple',
+        headerTooltip: 'Ресурс картриджа',
+        children: [
+          {
+            headerName: 'Black',
+            headerClass: 'grid-cell-centered bg-black',
+            field: 'cartridge_resource_bl',
+            width: 70,
+            editable: true,
+            cellStyle: {textAlign: 'center'}
+          },
+          {
+            headerName: 'CN',
+            headerClass: 'grid-cell-centered bg-cyan',
+            field: 'cartridge_resource_cn',
+            width: 70,
+            editable: true,
+            cellStyle: {textAlign: 'center'}
+          },
+          {
+            headerName: 'MG',
+            headerClass: 'grid-cell-centered bg-magenta',
+            field: 'cartridge_resource_mg',
+            width: 70,
+            editable: true,
+            cellStyle: {textAlign: 'center'}
+          },
+          {
+            headerName: 'YI',
+            headerClass: 'grid-cell-centered bg-yellow',
+            field: 'cartridge_resource_yi',
+            width: 70,
+            editable: true,
+            cellStyle: {textAlign: 'center'}
+          }
         ]
       },
       {
@@ -122,32 +196,42 @@ export class PrintersPageComponent implements OnInit {
         headerTooltip: 'Среднее заполнение страниц',
         children: [
           {
-            headerName: 'черный',
+            headerName: 'Black',
             headerClass: 'grid-cell-centered bg-black',
             field: 'average_coverage_bl',
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'CN',
             headerClass: 'grid-cell-centered bg-cyan',
             field: 'average_coverage_cn',
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'MG',
             headerClass: 'grid-cell-centered bg-magenta',
             field: 'average_coverage_mg',
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'YI',
             headerClass: 'grid-cell-centered bg-yellow',
             field: 'average_coverage_yi',
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'Всего',
             headerClass: 'grid-cell-centered',
             field: 'average_coverage_all',
+            width: 70,
+            cellStyle: {textAlign: 'center'}
           }
         ]
-      },
+      }
     ];
   }
 

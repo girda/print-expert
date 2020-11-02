@@ -2,18 +2,19 @@
   <form
     [formGroup]="form"
     class="form"
+    (ngSubmit)="onSubmit()"
   >
     <h2 class="form__title">Увійти до системи</h2>
     <mat-form-field class="form__row">
-      <mat-label>Email</mat-label>
+      <mat-label>Login</mat-label>
       <input
         matInput
-        formControlName="email"
-        placeholder="Email"
+        formControlName="login"
+        placeholder="Login"
       >
-      <mat-error *ngIf="form.get('email').invalid && form.get('password').touched">
-        <mat-error *ngIf="form.get('email').errors['required']">Email не повинен бути порожнім</mat-error>
-        <mat-error *ngIf="form.get('email').errors['email']">Введіть коректний email адресу</mat-error>
+      <mat-error *ngIf="form.get('login').invalid && form.get('password').touched">
+        <mat-error *ngIf="form.get('login').errors['required']">Login не повинен бути порожнім</mat-error>
+        <!-- <mat-error *ngIf="form.get('login').errors['login']">Введіть коректний email адресу</mat-error> -->
       </mat-error>
     </mat-form-field>
 
@@ -21,6 +22,7 @@
       <mat-label>Password</mat-label>
       <input
         matInput
+        type="password"
         formControlName="password"
         placeholder="Password"
       >

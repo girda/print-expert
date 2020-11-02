@@ -52,7 +52,7 @@ import {AgGridModule} from 'ag-grid-angular';
     ReactiveFormsModule,
     HttpClientModule,
     MatSelectModule,
-    AgGridModule
+    AgGridModule.withComponents([])
   ],
   providers: [],
   bootstrap: [AppComponent]

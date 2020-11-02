@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@ag-grid-enterprise/excel-export": "^24.1.0",
     "@angular/animations": "~10.1.6",
     "@angular/cdk": "^10.2.5",
     "@angular/common": "~10.1.6",
