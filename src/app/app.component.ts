@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import { AuthService } from './shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +8,13 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 })
 export class AppComponent implements OnInit {
 
-  range: FormGroup;
+  constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
-    this.range = new FormGroup({
-      start: new FormControl(),
-      end: new FormControl()
-    });
+    const protectionToken = localStorage.getItem('auth-token');
+
+    if (protectionToken !== null) {
+      this.auth.setToken(protectionToken);
+    }
   }
 }

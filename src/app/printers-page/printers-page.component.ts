@@ -1,238 +1,134 @@
-import { Component, OnInit } from '@angular/core';
-import {FormArray, FormControl, FormGroup} from '@angular/forms';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AgGridService} from '../shared/services/ag-grid.sevice';
 import {environment} from '../../environments/environment';
-import { Module } from 'ag-grid-community';
-import { ExcelExportModule } from '@ag-grid-enterprise/excel-export';
+import {ExcelExportModule} from '@ag-grid-enterprise/excel-export';
+import {PrinterService} from '../shared/services/printer.service';
+import {Subscription} from 'rxjs';
+import {IDropdown} from '../shared/interfaces';
+import {Module} from 'ag-grid-community';
+import {HttpClient} from '@angular/common/http';
+import {RestService} from '../shared/services/rest.service';
+
 @Component({
   selector: 'app-user-page',
   templateUrl: './printers-page.component.html',
   styleUrls: ['./printers-page.component.sass']
 })
-export class PrintersPageComponent implements OnInit {
+export class PrintersPageComponent implements OnInit, OnDestroy {
 
   formFilters: FormGroup;
-  
-
-  agGridIsReady = false;
-  modules = [ExcelExportModule]
   range: FormGroup;
 
-  clients: any[] = [{name: 'Клієнт 1', id: 1}, {name: 'Клієнт 2', id: 2}, {name: 'Клієнт 3', id: 3}];
-  cities: any[] = [{name: 'Місто 1', id: 1}, {name: 'Місто 2', id: 2}, {name: 'Місто 3', id: 3}];
-  departments: any[] = [{name: 'Відділ 1', id: 1}, {name: 'Відділ 2', id: 2}, {name: 'Відділ 3', id: 3}];
-  printers: any[] = [{name: 'Принтер 1', id: 1}, {name: 'Принтер 2', id: 2}, {name: 'Принтер 3', id: 3}];
+  // @ts-ignore
+  modules: Module[] = [ExcelExportModule];
 
-  filters = [
-    {placeholder: 'Клієнт', controlName: 'client', options: this.clients},
-    {placeholder: 'Місто', controlName: 'city', options: this.clients},
-    {placeholder: 'Відділ', controlName: 'department', options: this.clients},
-    {placeholder: 'Принтери', controlName: 'printers', options: this.clients},
-  ]
+  clients: IDropdown[];
+  clientsSubscription: Subscription;
+  clientsIsReady = true;
+
+  locations: IDropdown[];
+  locationsSubscription: Subscription;
+  locationsIsReady = true;
+
+  departments: IDropdown[];
+  departmentsSubscription: Subscription;
+  departmentsIsReady = true;
+
+  printers: IDropdown[];
+  printersSubscription: Subscription;
+  printersIsReady = true;
 
 
-  constructor(public gridService: AgGridService) {
-    this.gridService.gridOptions.columnDefs = this.createColumnDefs();
+  constructor(public gridService: AgGridService,
+              private printerService: PrinterService,
+              private rest: RestService) {
 
-    this.gridService.gridOptions.context = { componentParent: this };
+    this.gridService.gridOptions.columnDefs = this.printerService.createColumnDefs();
+    this.gridService.gridOptions.context = {componentParent: this};
   }
 
   ngOnInit(): void {
     this.formFilters = new FormGroup({
-      client: new FormControl(null),
-      city: new FormControl(null),
+      client: new FormControl(null, [Validators.required]),
+      location: new FormControl(null),
       department: new FormControl(null),
-      printers: new FormControl(null), 
+      printers: new FormControl(null),
       range: this.range = new FormGroup({
-        start: new FormControl(),
-        end: new FormControl()
+        start: new FormControl(null, [Validators.required]),
+        end: new FormControl(null, [Validators.required])
       })
     });
+
+    this.clientsSubscription = this.printerService.getClients()
+      .subscribe(clients => {
+        this.clients = clients;
+        this.clientsIsReady = false;
+      });
   }
 
-  submit(event: Event): void {
-    this.gridService.isReadyTable = true;
-    this.gridService.init(`${environment.apiUrl}/api/operator`);
+  onChangeClients(event): void {
     console.log(event);
-    console.log(this.formFilters.controls);
+    const id = event.value.id;
+    this.locationsSubscription = this.printerService.getLocations(id)
+      .subscribe(locations => {
+        this.locations = locations;
+        this.locationsIsReady = false;
+      });
+  }
+
+  onChangeLocations(event): void {
+    console.log(event);
+    const id = event.value.id;
+    this.departmentsSubscription = this.printerService.getDepartment(id)
+      .subscribe(departments => {
+        this.departments = departments;
+        this.departmentsIsReady = false;
+      });
+  }
+
+  onChangeDepartments(event): void {
+    console.log(event);
+    const id = event.value.id;
+    this.printersSubscription = this.printerService.getPrinters(id)
+      .subscribe(printers => {
+        this.printers = printers;
+        this.printersIsReady = false;
+      });
+  }
+
+  getTable(event: Event): void {
+    if (!this.gridService.isReadyTable) {
+      this.gridService.isReadyTable = true;
+      this.gridService.init(`${environment.apiUrl}/api/table`, this.formFilters.value);
+    } else {
+      this.rest.post(`${environment.apiUrl}/api/table`, this.formFilters.value)
+        .subscribe(rowData => {
+          this.gridService.gridOptions.api.setRowData(rowData);
+        });
+    }
+
     console.log(this.formFilters.value);
   }
 
-  onBtnExportCSV() {
+  onBtnExportCSV(): void {
     this.gridService.gridOptions.api.exportDataAsCsv();
   }
 
-  onBtnExportExcle() {
+  onBtnExportExcle(): void {
     this.gridService.gridOptions.api.exportDataAsExcel();
   }
 
-  getAllRows() {
-    let rowData = [];
+  getAllRows(): void {
+    const rowData = [];
     this.gridService.gridOptions.api.forEachNode(node => rowData.push(node.data));
     console.log(rowData);
   }
 
-  createColumnDefs(): any[] {
-    return [
-      {
-        headerName: 'Клиент',
-        field: 'client',
-        headerTooltip: 'Клиент'
-      },
-      {
-        headerName: 'Город',
-        field: 'city',
-        headerTooltip: 'Город',
-        filter: true,
-        // floatingFilter: true,
-        // floatingFilterComponentParams: {suppressFilterButton: true}
-      },
-      {
-        headerName: 'Отдел',
-        field: 'department',
-        headerTooltip: 'Отдел',
-        filter: true,
-        // floatingFilter: true,
-        // floatingFilterComponentParams: {suppressFilterButton: true}
-      },
-      {
-        headerName: 'Модель',
-        field: 'model',
-        headerTooltip: 'Модель'
-      },
-      {
-        headerName: 'Серийный номер',
-        field: 'serial_number',
-        headerTooltip: 'Серийный номер'
-      },
-      {
-        headerName: 'IP',
-        field: 'ip',
-        headerTooltip: 'IP',
-        width: 70
-      },
-      {
-        headerName: 'Количество распечатанных страниц',
-        field: 'page_count',
-        headerTooltip: 'Количество распечатанных страниц'
-      },
-      {
-        headerName: 'Количество замен картриджей',
-        headerClass: 'grid-cell-centered bg-blue',
-        headerTooltip: 'Количество замен картриджей',
-        children: [
-          {
-            headerName: 'Black',
-            headerClass: 'grid-cell-centered bg-black',
-            field: 'quantity_black',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'CN',
-            headerClass: 'grid-cell-centered bg-cyan',
-            field: 'quantity_cn',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'MG',
-            headerClass: 'grid-cell-centered bg-magenta',
-            field: 'quantity_mg',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'YI',
-            headerClass: 'grid-cell-centered bg-yellow',
-            field: 'quantity_yi',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-        ]
-      },
-      {
-        headerName: 'Ресурс картриджа',
-        headerClass: 'grid-cell-centered bg-purple',
-        headerTooltip: 'Ресурс картриджа',
-        children: [
-          {
-            headerName: 'Black',
-            headerClass: 'grid-cell-centered bg-black',
-            field: 'cartridge_resource_bl',
-            width: 70,
-            editable: true,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'CN',
-            headerClass: 'grid-cell-centered bg-cyan',
-            field: 'cartridge_resource_cn',
-            width: 70,
-            editable: true,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'MG',
-            headerClass: 'grid-cell-centered bg-magenta',
-            field: 'cartridge_resource_mg',
-            width: 70,
-            editable: true,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'YI',
-            headerClass: 'grid-cell-centered bg-yellow',
-            field: 'cartridge_resource_yi',
-            width: 70,
-            editable: true,
-            cellStyle: {textAlign: 'center'}
-          }
-        ]
-      },
-      {
-        headerName: 'Среднее заполнение страниц',
-        headerClass: 'grid-cell-centered bg-green',
-        headerTooltip: 'Среднее заполнение страниц',
-        children: [
-          {
-            headerName: 'Black',
-            headerClass: 'grid-cell-centered bg-black',
-            field: 'average_coverage_bl',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'CN',
-            headerClass: 'grid-cell-centered bg-cyan',
-            field: 'average_coverage_cn',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'MG',
-            headerClass: 'grid-cell-centered bg-magenta',
-            field: 'average_coverage_mg',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'YI',
-            headerClass: 'grid-cell-centered bg-yellow',
-            field: 'average_coverage_yi',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          },
-          {
-            headerName: 'Всего',
-            headerClass: 'grid-cell-centered',
-            field: 'average_coverage_all',
-            width: 70,
-            cellStyle: {textAlign: 'center'}
-          }
-        ]
-      }
-    ];
+  ngOnDestroy(): void {
+    if (this.clientsSubscription) {
+      this.clientsSubscription.unsubscribe();
+    }
   }
 
 }

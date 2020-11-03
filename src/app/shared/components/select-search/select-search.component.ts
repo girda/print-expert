@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -12,6 +12,8 @@ export class SelectSearchComponent implements OnInit {
   @Input() placeholder: string;
   @Input() formGroup: FormGroup;
   @Input() controlName: string;
+  @Input() disabled: boolean;
+  @Output() change = new EventEmitter();
 
   search: FormControl = new FormControl();
 
@@ -20,8 +22,7 @@ export class SelectSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  filterMyOptions(event): void {
-    console.log(event);
-    // console.log(this.formFilters.get('searchClient').value);
+  onChange(event): void {
+    this.change.emit(event);
   }
 }

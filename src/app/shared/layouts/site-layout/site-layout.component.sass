@@ -1,0 +1,16 @@
+.nav
+  display: flex
+  flex-grow: 1
+
+  &__item
+    a
+      text-decoration: none
+      color: white
+      margin-right: 40px
+    &.is-active a
+      text-decoration: underline
+
+    &:last-child
+      margin-left: auto
+      a
+        margin-right: 0

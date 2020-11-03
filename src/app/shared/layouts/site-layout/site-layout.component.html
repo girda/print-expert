@@ -2,6 +2,29 @@
   <div class="container">
     <div class="header__in">
       <div class="header__logo">Print Expert</div>
+
+      <ul class="header__nav nav">
+        <li
+          *ngFor="let link of links"
+          class="nav__item"
+          routerLinkActive="is-active"
+        >
+          <a
+            routerLink="/{{link.url}}"
+          >
+            {{link.name}}
+          </a>
+        </li>
+
+        <li class="nav__item">
+          <a
+            href="#"
+            (click)="logout($event)"
+          >
+            Вийти
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </header>

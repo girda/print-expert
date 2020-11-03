@@ -1,0 +1,37 @@
+<div class="clients">
+  <div class="container">
+    <div class="clients__in">
+      <h2 class="clients__title title">Заголовок</h2>
+
+      <div class="clients__btns">
+        <button
+          class="clients__btn create-client"
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="openPopup()"
+        >
+          Створити клієнта
+        </button>
+      </div>
+
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="getTable($event)"
+        class="filters"
+      >
+
+        <app-select-search
+          placeholder="Клієнт"
+          controlName="client"
+          [disabled]="clientsIsReady"
+          [formGroup]="form"
+          [options]="clients"
+          (change)="onChangeClients($event)"
+        ></app-select-search>
+
+      </form>
+    </div>
+  </div>
+</div>

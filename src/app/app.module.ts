@@ -24,6 +24,8 @@ import {HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
 import { SelectSearchComponent } from './shared//components/select-search/select-search.component';
 import {AgGridModule} from 'ag-grid-angular';
+import { ClientsPageComponent } from './clients-page/clients-page.component';
+import { PopupComponent } from './shared/components/popup/popup.component';
 
 
 @NgModule({
@@ -34,7 +36,9 @@ import {AgGridModule} from 'ag-grid-angular';
     SiteLayoutComponent,
     AdminPageComponent,
     PrintersPageComponent,
-    SelectSearchComponent
+    SelectSearchComponent,
+    ClientsPageComponent,
+    PopupComponent
   ],
   imports: [
     BrowserModule,

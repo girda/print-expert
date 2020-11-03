@@ -36,10 +36,11 @@ export class AgGridService {
     };
   }
 
-  init(url: string): void {
+  init(url: string, params): void {
+    console.log(params);
     this.gridOptions.onGridReady = () => {
       this.gridOptions.api.sizeColumnsToFit();
-      this.rest.get(url).subscribe(
+      this.rest.post(url, params).subscribe(
         rowData => {
           console.log(rowData);
           this.gridOptions.api.setRowData(rowData);
@@ -58,16 +59,16 @@ export class AgGridService {
               quantity_black: '30%',
               quantity_cn: '30%',
               quantity_mg: '30%',
-              quantity_yi: '30%',
+              quantity_yl: '30%',
               average_coverage_bl: '30%',
               average_coverage_cn: '30%',
               average_coverage_mg: '30%',
-              average_coverage_yi: '30%',
+              average_coverage_yl: '30%',
               average_coverage_all: '30%',
               cartridge_resource_bl: '',
               cartridge_resource_cn: '',
               cartridge_resource_mg: '',
-              cartridge_resource_yi: ''
+              cartridge_resource_yl: ''
             },
             {
               client: 'Intertop',

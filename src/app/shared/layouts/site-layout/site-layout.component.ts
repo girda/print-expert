@@ -9,10 +9,15 @@ import {Router} from '@angular/router';
 })
 export class SiteLayoutComponent {
 
+  links: any[] = [
+    {name: 'Принтери', url: 'printers'},
+    {name: 'Кліенти', url: 'clients'}
+  ];
+
   constructor(private auth: AuthService,
               private router: Router) { }
 
-  logout(event: Event) {
+  logout(event: Event): void {
     event.preventDefault();
     this.auth.logout();
     this.router.navigate(['/login']);

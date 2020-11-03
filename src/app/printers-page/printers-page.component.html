@@ -4,14 +4,44 @@
 
       <h2 class="printers__title">Заголовок</h2>
       <div class="printers__filters">
-        <form [formGroup]="formFilters" (ngSubmit)="submit($event)" class="filters">
+        <form
+          [formGroup]="formFilters"
+          (ngSubmit)="getTable($event)"
+          class="filters">
 
           <app-select-search
-            *ngFor="let filter of filters"
-            placeholder="{{filter.placeholder}}"
-            controlName="{{filter.controlName}}"
+            placeholder="Клієнт"
+            controlName="client"
+            [disabled]="clientsIsReady"
             [formGroup]="formFilters"
-            [options]="filter.options"
+            [options]="clients"
+            (change)="onChangeClients($event)"
+          ></app-select-search>
+
+          <app-select-search
+            placeholder="Місто"
+            controlName="location"
+            [disabled]="locationsIsReady"
+            [formGroup]="formFilters"
+            [options]="locations"
+            (change)="onChangeLocations($event)"
+          ></app-select-search>
+
+          <app-select-search
+            placeholder="Відділ"
+            controlName="department"
+            [disabled]="departmentsIsReady"
+            [formGroup]="formFilters"
+            [options]="departments"
+            (change)="onChangeDepartments($event)"
+          ></app-select-search>
+
+          <app-select-search
+            placeholder="Принтери"
+            controlName="printers"
+            [disabled]="printersIsReady"
+            [formGroup]="formFilters"
+            [options]="printers"
           ></app-select-search>
 
           <mat-form-field appearance="fill">
@@ -43,7 +73,7 @@
 
 
       <ng-container *ngIf="gridService.isReadyTable">
-        <button (click)="getAllRows()">test</button>
+
         <ag-grid-angular
           style="width: 100%; height: 400px;"
           class="ag-theme-alpine"
@@ -52,33 +82,40 @@
         >
         </ag-grid-angular>
 
-        <button
-          type="button"
-          mat-raised-button
-          color="primary"
-          (click)="onBtnExportCSV()"
-        >
-          Завантажити CSV файл
-        </button>
+        <div class="printers__btns">
+          <button
+            class="printers__btn"
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="onBtnExportCSV()"
+          >
+            Завантажити CSV файл
+          </button>
 
-        <button
-          type="button"
-          mat-raised-button
-          color="primary"
-          (click)="onBtnExportExcle()"
-        >
-          Завантажити Excle файл
-        </button>
+          <button
+            class="printers__btn"
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="onBtnExportExcle()"
+          >
+            Завантажити Excle файл
+          </button>
+
+          <button
+            class="printers__btn"
+            type="button"
+            mat-raised-button
+            (click)="getAllRows()"
+          >
+            Зберегти
+          </button>
+        </div>
+
       </ng-container>
 
-      
-        <!-- <ng-template #loaderAgGrid>
-          <div class="center">
-            Loading...
-          </div>
-        </ng-template> -->
-
-      </div>
+    </div>
 
   </div>
 </div>
