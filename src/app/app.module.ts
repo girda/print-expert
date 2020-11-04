@@ -18,14 +18,19 @@ import {LoginPageComponent} from './login-page/login-page.component';
 import {AuthLayoutComponent} from './shared/layouts/auth-layout/auth-layout.component';
 import {SiteLayoutComponent} from './shared/layouts/site-layout/site-layout.component';
 import {MatInputModule} from '@angular/material/input';
+import {MatListModule} from '@angular/material/list';
+import {MatIconModule} from '@angular/material/icon';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatTableModule} from '@angular/material/table';
+import {MatGridListModule} from '@angular/material/grid-list';
 import {AdminPageComponent} from './admin-page/admin-page.component';
 import {PrintersPageComponent} from './printers-page/printers-page.component';
 import {HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
-import { SelectSearchComponent } from './shared//components/select-search/select-search.component';
+import {SelectSearchComponent} from './shared/components/select-search/select-search.component';
 import {AgGridModule} from 'ag-grid-angular';
-import { ClientsPageComponent } from './clients-page/clients-page.component';
-import { PopupComponent } from './shared/components/popup/popup.component';
+import {ClientsPageComponent} from './clients-page/clients-page.component';
+import {PopupComponent} from './shared/components/popup/popup.component';
 
 
 @NgModule({
@@ -48,14 +53,19 @@ import { PopupComponent } from './shared/components/popup/popup.component';
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
+    MatRadioModule,
     MatAutocompleteModule,
     MatButtonModule,
+    MatIconModule,
+    MatGridListModule,
     MatNativeDateModule,
     NgxMatSelectSearchModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatSelectModule,
+    MatListModule,
+    MatTableModule,
     AgGridModule.withComponents([])
   ],
   providers: [],

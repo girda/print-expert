@@ -22,4 +22,8 @@ export class SiteLayoutComponent {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
+  showInfo(link) {
+    console.log(link);
+  }
+
 }

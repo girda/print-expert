@@ -1,37 +1,73 @@
 <div class="clients">
   <div class="container">
     <div class="clients__in">
-      <h2 class="clients__title title">Заголовок</h2>
 
-      <div class="clients__btns">
-        <button
-          class="clients__btn create-client"
-          type="button"
-          mat-raised-button
-          color="primary"
-          (click)="openPopup()"
-        >
-          Створити клієнта
-        </button>
+      <div class="clients__grid">
+
+        <div class="clients__grid-item">
+          <h3 class="clients__grid-title">Кліенти</h3>
+          <mat-card>
+
+            <mat-nav-list>
+              <mat-list-item
+                *ngFor="let link of links"
+                (click)="selectClient($event, link)"
+              >
+                  {{ link.name }}
+              </mat-list-item>
+            </mat-nav-list>
+
+            <div class="clients__btn">
+              <button
+                class="create-client"
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="openPopup()"
+              >
+                Створити клієнта
+              </button>
+            </div>
+
+          </mat-card>
+        </div>
+
+        <div class="clients__grid-item">
+          <h3 class="clients__grid-title">Підключення CWW</h3>
+          <mat-card>
+
+            <mat-nav-list>
+              <mat-list-item disabled>
+                <div class="test">
+                  <span>IP</span>
+                  <span>Login</span>
+                  <span>Password</span>
+                </div>
+              </mat-list-item>
+              <mat-list-item
+                *ngFor="let link of links"
+                (click)="selectClient($event, link)"
+              >
+                {{ link.name }}
+              </mat-list-item>
+            </mat-nav-list>
+
+            <div class="clients__btn">
+              <button
+                class="create-client"
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="openPopup()"
+              >
+                Створити клієнта
+              </button>
+            </div>
+
+          </mat-card>
+        </div>
       </div>
 
-
-      <form
-        [formGroup]="form"
-        (ngSubmit)="getTable($event)"
-        class="filters"
-      >
-
-        <app-select-search
-          placeholder="Клієнт"
-          controlName="client"
-          [disabled]="clientsIsReady"
-          [formGroup]="form"
-          [options]="clients"
-          (change)="onChangeClients($event)"
-        ></app-select-search>
-
-      </form>
     </div>
   </div>
 </div>

@@ -1,5 +1,38 @@
-<h3>Popup</h3>
 
-{{data}}
+<form
+  [formGroup]="formClient"
+  class="popup"
+  (ngSubmit)="onSubmitFormClient()"
+>
+  <h3 class="popup__title">Створити нового клієнта</h3>
+  <mat-form-field class="popup__row">
+    <mat-label>Кліент</mat-label>
+    <input
+      formControlName="name"
+      matInput
+      type="text"
+      placeholder="Кліент"
+    >
+    <mat-error *ngIf="formClient.get('name').invalid && formClient.get('name').touched">
+      <mat-error *ngIf="formClient.get('name').errors['required']">Поле не повинно бути порожнім</mat-error>
+    </mat-error>
+  </mat-form-field>
+  <div class="popup__btns">
+    <button
+      type="button"
+      (click)="onCancel()"
+      mat-raised-button
+    >
+      Скасувати
+    </button>
+    <button
+      type="submit"
+      [disabled]="formClient.invalid || formClient.disabled"
+      mat-raised-button
+      color="primary"
+    >
+      Створити
+    </button>
+  </div>
 
-<button type="submit" (click)="onCancel()">Cancel</button>
+</form>

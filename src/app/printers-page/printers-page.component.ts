@@ -7,7 +7,6 @@ import {PrinterService} from '../shared/services/printer.service';
 import {Subscription} from 'rxjs';
 import {IDropdown} from '../shared/interfaces';
 import {Module} from 'ag-grid-community';
-import {HttpClient} from '@angular/common/http';
 import {RestService} from '../shared/services/rest.service';
 
 @Component({

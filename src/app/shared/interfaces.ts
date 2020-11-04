@@ -7,3 +7,8 @@ export interface IDropdown {
   id: number;
   name: string;
 }
+
+export interface IClient {
+  id?: number;
+  name: string;
+}
