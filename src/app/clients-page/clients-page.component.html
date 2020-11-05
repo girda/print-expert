@@ -2,72 +2,155 @@
   <div class="container">
     <div class="clients__in">
 
+      <!-- START  clients__grid -->
       <div class="clients__grid">
-
+        <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
           <h3 class="clients__grid-title">Кліенти</h3>
-          <mat-card>
 
-            <mat-nav-list>
-              <mat-list-item
-                *ngFor="let link of links"
-                (click)="selectClient($event, link)"
-              >
-                  {{ link.name }}
-              </mat-list-item>
-            </mat-nav-list>
+          <ng-container *ngIf="clients$ | async as clients; else loaderClients">
+            <mat-card>
 
-            <div class="clients__btn">
-              <button
-                class="create-client"
-                type="button"
-                mat-raised-button
-                color="primary"
-                (click)="openPopup()"
-              >
-                Створити клієнта
-              </button>
+              <mat-nav-list>
+                <mat-list-item
+                  *ngFor="let client of clients"
+                  (click)="selectClient($event, client)"
+                >
+                  {{ client.name }}
+                </mat-list-item>
+              </mat-nav-list>
+
+              <div class="clients__btn">
+                <button
+                  class="create-client"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="openPopup(paramsClient)"
+                >
+                  Створити клієнта
+                </button>
+              </div>
+
+            </mat-card>
+          </ng-container>
+
+          <ng-template #loaderClients>
+            <div class="clients__loader">
+              <mat-spinner></mat-spinner>
             </div>
+          </ng-template>
 
-          </mat-card>
         </div>
+        <!-- END  clients__grid-item -->
 
+        <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <h3 class="clients__grid-title">Підключення CWW</h3>
-          <mat-card>
+          <ng-container *ngIf="connectionsCWW">
+            <h3 class="clients__grid-title">{{currentClientName}} <img src="/assets/icons/arrow.svg"> Підключення CWW</h3>
+            <mat-card>
 
-            <mat-nav-list>
-              <mat-list-item disabled>
-                <div class="test">
-                  <span>IP</span>
-                  <span>Login</span>
-                  <span>Password</span>
-                </div>
-              </mat-list-item>
-              <mat-list-item
-                *ngFor="let link of links"
-                (click)="selectClient($event, link)"
-              >
-                {{ link.name }}
-              </mat-list-item>
-            </mat-nav-list>
+              <mat-nav-list>
+                <mat-list-item disabled>
+                  <div class="clients__table">
+                    <span>IP</span>
+                    <span>Login</span>
+                    <span>Password</span>
+                  </div>
+                </mat-list-item>
+                <mat-list-item
+                  *ngFor="let connection of connectionsCWW"
+                  (click)="selectConnection($event, connection)"
+                >
+                  <div class="clients__table">
+                    <span>{{ connection.ip }}</span>
+                    <span>{{ connection.login }}</span>
+                    <span>{{ connection.pswd }}</span>
+                  </div>
+                </mat-list-item>
+              </mat-nav-list>
 
-            <div class="clients__btn">
-              <button
-                class="create-client"
-                type="button"
-                mat-raised-button
-                color="primary"
-                (click)="openPopup()"
-              >
-                Створити клієнта
-              </button>
-            </div>
+              <div class="clients__btn">
+                <button
+                  class="create-client"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="openPopup(paramsConnection)"
+                >
+                  Створити підключення CWW
+                </button>
+              </div>
 
-          </mat-card>
+            </mat-card>
+          </ng-container>
         </div>
-      </div>
+        <!-- END  clients__grid-item -->
 
+        <!-- START  clients__grid-item -->
+        <div class="clients__grid-item">
+          <ng-container *ngIf="locations">
+            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>
+
+            <mat-card>
+              <mat-nav-list>
+                <mat-list-item
+                  *ngFor="let location of locations"
+                  (click)="selectLocation($event, location)"
+                >
+                  {{ location.name }}
+                </mat-list-item>
+              </mat-nav-list>
+
+              <div class="clients__btn">
+                <button
+                  class="create-client"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="openPopup(paramsLocation)"
+                >
+                  Створити місто
+                </button>
+              </div>
+
+            </mat-card>
+          </ng-container>
+        </div>
+        <!-- END  clients__grid-item -->
+
+        <!-- START  clients__grid-item -->
+        <div class="clients__grid-item">
+          <ng-container *ngIf="departments">
+            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>
+
+            <mat-card>
+              <mat-nav-list>
+                <mat-list-item
+                  *ngFor="let department of departments"
+                >
+                  {{ department.name }}
+                </mat-list-item>
+              </mat-nav-list>
+
+              <div class="clients__btn">
+                <button
+                  class="create-client"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="openPopup(paramsDepartment)"
+                >
+                  Створити відділ
+                </button>
+              </div>
+
+            </mat-card>
+          </ng-container>
+        </div>
+        <!-- END  clients__grid-item -->
+      </div>
+      <!-- END  clients__grid -->
     </div>
   </div>
 </div>

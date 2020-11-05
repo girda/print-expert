@@ -12,11 +12,28 @@
   &__grid
     display: flex
     justify-content: space-between
+    flex-wrap: wrap
     &-item
       width: 48%
+      margin-bottom: 30px
     &-title
+      display: flex
+      align-items: center
+      justify-content: center
       font-size: 22px
-      text-align: center
+      img
+        height: 20px
+        margin: 0 10px
+
+  &__loader
+    display: flex
+    justify-content: center
+
+  &__table
+    width: 100%
+    display: flex
+    span
+      width: 33%
 
 
 .create-client
@@ -33,8 +50,3 @@
   width: 100%
   height: 100%
 
-.test
-  width: 100%
-  display: flex
-  span
-    width: 33%

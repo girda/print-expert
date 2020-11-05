@@ -1,54 +1,135 @@
-import { Component, OnInit } from '@angular/core';
-import {IDropdown} from '../shared/interfaces';
-import {Subscription} from 'rxjs';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {PrinterService} from '../shared/services/printer.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {IClient, IConnectionCWW, IDepartment, ILocation} from '../shared/interfaces';
+import {Observable, Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
-import { PopupComponent } from '../shared/components/popup/popup.component';
+import {PopupComponent} from '../shared/components/popup/popup.component';
 import {ClientService} from '../shared/services/client.service';
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'}
-];
 @Component({
   selector: 'app-clients-page',
   templateUrl: './clients-page.component.html',
   styleUrls: ['./clients-page.component.sass']
 })
 
-export class ClientsPageComponent implements OnInit {
+export class ClientsPageComponent implements OnInit, OnDestroy {
 
-  links: any[] = [
-    {name: 'Принтери', url: 'printers'},
-    {name: 'Кліенти', url: 'clients'}
-  ];
+  clients$: Observable<IClient[]>;
+  currentClientName: string;
+  paramsClient = {name: 'Кліент', title: 'Створити нового кліента', route: 'clients'};
+
+  connectionsCWWSubscription: Subscription;
+  connectionsCWW: IConnectionCWW[];
+  currentConnectionIP: string;
+  paramsConnection = {name: 'IP', title: 'Створити нове підключення', login: 'Логін', password: 'Пароль', route: 'connections'};
+
+  locations: ILocation[];
+  locationsSubscription: Subscription;
+  currentLocationName: string;
+  paramsLocation = {name: 'Місто', title: 'Створити нове місто', route: 'locations'};
+
+  departments: IDepartment[];
+  departmentsSubscription: Subscription;
+  paramsDepartment = {name: 'Відділ', title: 'Створити новий відділ', route: 'departments'};
+
+  dialogSubscription: Subscription;
 
   constructor(private clientService: ClientService,
-              public matDialog: MatDialog) { }
+              public matDialog: MatDialog) {
+  }
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
 
   ngOnInit(): void {
-
+    this.clients$ = this.clientService.getClients();
   }
 
-  openPopup(): void {
-    const dialogRef = this.matDialog.open(PopupComponent, {data: 'bla' });
+  openPopup(params): void {
+    const dialogRef = this.matDialog.open(PopupComponent, {data: params});
+
+    this.dialogSubscription = dialogRef.afterClosed().subscribe(
+      () => {
+        switch (params.route) {
+          case 'clients':
+            this.clients$ = this.clientService.getClients();
+            this.connectionsCWW = null;
+            this.locations = null;
+            this.departments = null;
+            break;
+          case 'connections':
+            this.getConnectionsCWW(this.clientService.currentClientId);
+            break;
+        }
+      }
+    );
   }
-  selectClient(event, link): void {
-    console.log(link);
+
+  selectClient(event, client): void {
+    console.log(client);
+    this.clientService.currentClientId = client.id;
+    this.currentClientName = client.name;
+    this.getConnectionsCWW(client.id);
+  }
+
+  selectConnection(event, connection): void {
+    console.log(connection);
+    this.currentConnectionIP = connection.ip;
+    this.clientService.currentConnectionId = connection.id;
+    this.locationsSubscription = this.clientService.getLocations(connection.id)
+      .subscribe(
+        connections => {
+          console.log(connections);
+          this.locations = connections;
+          this.departments = null;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
+
+  selectLocation(event, location): void {
+    console.log(location);
+    this.currentLocationName = location.name;
+    this.clientService.currentLocationId = location.id;
+    this.departmentsSubscription = this.clientService.getDepartments(location.id)
+      .subscribe(
+        departments => {
+          console.log(departments);
+          this.departments = departments;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
+
+  private getConnectionsCWW(id: number): void {
+    this.connectionsCWWSubscription = this.clientService.getConnectionsCWW(id)
+      .subscribe(
+        connections => {
+          console.log(connections);
+          this.connectionsCWW = connections;
+          this.locations = null;
+          this.departments = null;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
+
+  ngOnDestroy(): void {
+    if (this.connectionsCWWSubscription) {
+      this.connectionsCWWSubscription.unsubscribe();
+    }
+    if (this.locationsSubscription) {
+      this.locationsSubscription.unsubscribe();
+    }
+    if (this.departmentsSubscription) {
+      this.departmentsSubscription.unsubscribe();
+    }
+    if (this.dialogSubscription) {
+      this.dialogSubscription.unsubscribe();
+    }
   }
 
 

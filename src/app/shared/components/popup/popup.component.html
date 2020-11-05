@@ -1,22 +1,53 @@
-
 <form
-  [formGroup]="formClient"
+  [formGroup]="form"
   class="popup"
-  (ngSubmit)="onSubmitFormClient()"
+  (ngSubmit)="onSubmit()"
 >
-  <h3 class="popup__title">Створити нового клієнта</h3>
+  <h3 class="popup__title">{{data.title}}</h3>
+
   <mat-form-field class="popup__row">
-    <mat-label>Кліент</mat-label>
+    <mat-label>{{data.name}}</mat-label>
     <input
       formControlName="name"
       matInput
       type="text"
-      placeholder="Кліент"
+      placeholder="{{data.name}}"
     >
-    <mat-error *ngIf="formClient.get('name').invalid && formClient.get('name').touched">
-      <mat-error *ngIf="formClient.get('name').errors['required']">Поле не повинно бути порожнім</mat-error>
+    <mat-error *ngIf="form.get('name').invalid && form.get('name').touched">
+      <mat-error *ngIf="form.get('name').errors['required']">Поле не повинно бути порожнім</mat-error>
     </mat-error>
   </mat-form-field>
+
+  <ng-container *ngIf="data.login">
+    <mat-form-field class="popup__row">
+      <mat-label>{{data.login}}</mat-label>
+      <input
+        formControlName="login"
+        matInput
+        type="text"
+        placeholder="{{data.login}}"
+      >
+      <mat-error *ngIf="form.get('login').invalid && form.get('login').touched">
+        <mat-error *ngIf="form.get('login').errors['required']">Поле не повинно бути порожнім</mat-error>
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="data.password">
+    <mat-form-field class="popup__row">
+      <mat-label>{{data.password}}</mat-label>
+      <input
+        formControlName="password"
+        matInput
+        type="text"
+        placeholder="{{data.password}}"
+      >
+      <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
+        <mat-error *ngIf="form.get('password').errors['required']">Поле не повинно бути порожнім</mat-error>
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
   <div class="popup__btns">
     <button
       type="button"
@@ -27,7 +58,7 @@
     </button>
     <button
       type="submit"
-      [disabled]="formClient.invalid || formClient.disabled"
+      [disabled]="form.invalid || form.disabled"
       mat-raised-button
       color="primary"
     >
