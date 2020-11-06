@@ -23,6 +23,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
   modules: Module[] = [ExcelExportModule];
 
   clients: IDropdown[];
+  currentClientId: number;
   clientsSubscription: Subscription;
   clientsIsReady = true;
 
@@ -69,17 +70,28 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
   onChangeClients(event): void {
     console.log(event);
     const id = event.value.id;
+    this.currentClientId = event.value.id;
     this.locationsSubscription = this.printerService.getLocations(id)
       .subscribe(locations => {
         this.locations = locations;
         this.locationsIsReady = false;
       });
+
+    this.departmentsSubscription = this.printerService.getDepartments({client_id: id})
+      .subscribe(departments => {
+        this.departments = departments;
+        this.departmentsIsReady = false;
+      });
   }
 
   onChangeLocations(event): void {
     console.log(event);
-    const id = event.value.id;
-    this.departmentsSubscription = this.printerService.getDepartment(id)
+    const where = {
+      name: event.value.name,
+      client_id: this.currentClientId
+    };
+    console.log(where);
+    this.departmentsSubscription = this.printerService.getDepartments(where)
       .subscribe(departments => {
         this.departments = departments;
         this.departmentsIsReady = false;

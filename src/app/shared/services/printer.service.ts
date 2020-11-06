@@ -21,8 +21,8 @@ export class PrinterService {
     return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/locations/${JSON.stringify({client_id: id})}`);
   }
 
-  getDepartment(id: number): Observable<IDropdown[]> {
-    return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/departments/${id}`);
+  getDepartments(where: any): Observable<IDropdown[]> {
+    return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/departments/${JSON.stringify(where)}`);
   }
 
   getPrinters(id: number): Observable<IDropdown[]> {

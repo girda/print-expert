@@ -21,7 +21,7 @@ export class ClientService {
     return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/clients`);
   }
 
-  create(client: IClient, route: string): Observable<any> {
+  create(client: any, route: string): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/api/${route}`, client);
   }
 
@@ -33,8 +33,8 @@ export class ClientService {
     return this.http.get<ILocation[]>(`${environment.apiUrl}/api/locations/${JSON.stringify({cwwc_id: id})}`);
   }
 
-  getDepartments(id: number): Observable<IDepartment[]> {
-    return this.http.get<IDepartment[]>(`${environment.apiUrl}/api/departments/${id}`);
+  getDepartments(where: any): Observable<IDropdown[]> {
+    return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/departments/${JSON.stringify(where)}`);
   }
 
 }

@@ -56,7 +56,15 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
             break;
           case 'connections':
             this.getConnectionsCWW(this.clientService.currentClientId);
+            this.locations = null;
+            this.departments = null;
             break;
+          case 'locations':
+            this.getLocation(this.clientService.currentConnectionId);
+            this.departments = null;
+            break;
+          case 'departments':
+            this.getDepartments({location_id: this.clientService.currentLocationId});
         }
       }
     );
@@ -73,7 +81,33 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
     console.log(connection);
     this.currentConnectionIP = connection.ip;
     this.clientService.currentConnectionId = connection.id;
-    this.locationsSubscription = this.clientService.getLocations(connection.id)
+    this.getLocation(connection.id);
+  }
+
+  selectLocation(event, location): void {
+    console.log(location);
+    this.currentLocationName = location.name;
+    this.clientService.currentLocationId = location.id;
+    this.getDepartments({location_id: this.clientService.currentLocationId});
+  }
+
+  private getConnectionsCWW(id: number): void {
+    this.connectionsCWWSubscription = this.clientService.getConnectionsCWW(id)
+      .subscribe(
+        connections => {
+          console.log(connections);
+          this.connectionsCWW = connections;
+          this.locations = null;
+          this.departments = null;
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  }
+
+  private getLocation(id: number): void {
+    this.locationsSubscription = this.clientService.getLocations(id)
       .subscribe(
         connections => {
           console.log(connections);
@@ -86,30 +120,12 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
       );
   }
 
-  selectLocation(event, location): void {
-    console.log(location);
-    this.currentLocationName = location.name;
-    this.clientService.currentLocationId = location.id;
-    this.departmentsSubscription = this.clientService.getDepartments(location.id)
+  private getDepartments(where: any): void {
+    this.departmentsSubscription = this.clientService.getDepartments(where)
       .subscribe(
         departments => {
           console.log(departments);
           this.departments = departments;
-        },
-        error => {
-          console.log(error);
-        }
-      );
-  }
-
-  private getConnectionsCWW(id: number): void {
-    this.connectionsCWWSubscription = this.clientService.getConnectionsCWW(id)
-      .subscribe(
-        connections => {
-          console.log(connections);
-          this.connectionsCWW = connections;
-          this.locations = null;
-          this.departments = null;
         },
         error => {
           console.log(error);

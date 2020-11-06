@@ -4,7 +4,7 @@ export interface IUser {
 }
 
 export interface IDropdown {
-  id: number;
+  id?: number;
   name: string;
 }
 
@@ -31,5 +31,6 @@ export interface ILocation {
 export interface IDepartment {
   id?: number;
   name: string;
-  location_id: number;
+  location_id?: number;
+  client_id?: number;
 }
