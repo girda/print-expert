@@ -41,6 +41,12 @@ export class PrinterService {
         field: 'city',
         headerTooltip: 'Город',
         filter: true,
+        editable: true,
+        cellEditor: 'agRichSelectCellEditor',
+        cellEditorParams: {
+          cellHeight: 50,
+          values: ['Ireland', 'USA'],
+        },
         // floatingFilter: true,
         // floatingFilterComponentParams: {suppressFilterButton: true}
       },

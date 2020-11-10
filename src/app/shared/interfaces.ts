@@ -19,6 +19,7 @@ export interface IConnectionCWW {
   pswd: string;
   client_id: number;
   id?: number;
+  status: number;
 }
 
 export interface ILocation {

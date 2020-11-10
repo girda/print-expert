@@ -1,8 +1,10 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AgGridService} from '../shared/services/ag-grid.sevice';
 import {environment} from '../../environments/environment';
 import {ExcelExportModule} from '@ag-grid-enterprise/excel-export';
+import {RichSelectModule} from '@ag-grid-enterprise/rich-select';
+
 import {PrinterService} from '../shared/services/printer.service';
 import {Subscription} from 'rxjs';
 import {IDropdown} from '../shared/interfaces';
@@ -20,7 +22,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
   range: FormGroup;
 
   // @ts-ignore
-  modules: Module[] = [ExcelExportModule];
+  modules: Module[] = [ExcelExportModule, RichSelectModule];
 
   clients: IDropdown[];
   currentClientId: number;
@@ -131,6 +133,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
   }
 
   getAllRows(): void {
+    this.gridService.gridOptions.api.stopEditing();
     const rowData = [];
     this.gridService.gridOptions.api.forEachNode(node => rowData.push(node.data));
     console.log(rowData);

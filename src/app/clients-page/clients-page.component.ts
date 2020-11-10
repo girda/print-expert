@@ -91,6 +91,11 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
     this.getDepartments({location_id: this.clientService.currentLocationId});
   }
 
+  delete(e, p): void {
+    e.stopPropagation();
+    console.log(p);
+  }
+
   private getConnectionsCWW(id: number): void {
     this.connectionsCWWSubscription = this.clientService.getConnectionsCWW(id)
       .subscribe(

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { IUser } from '../interfaces';
-import { tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment'
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {IUser} from '../interfaces';
+import {tap} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +23,12 @@ export class AuthService {
     return this.http.post<{ token: string }>(`${environment.apiUrl}/api/auth/login`, user)
       .pipe(
         tap(
-          ({ token }) => {
+          ({token}) => {
             localStorage.setItem('auth-token', token);
             this.setToken(token);
           }
         )
-      )
+      );
   }
 
   setToken(token: string) {

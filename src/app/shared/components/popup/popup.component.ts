@@ -50,6 +50,7 @@ export class PopupComponent implements OnInit {
         res => {
           this.dialogRef.close();
           alert(res.message);
+
         },
         error => {
           console.log(error);

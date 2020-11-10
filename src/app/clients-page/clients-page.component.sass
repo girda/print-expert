@@ -32,10 +32,26 @@
   &__table
     width: 100%
     display: flex
+    align-items: center
+
     span
-      width: 33%
+      display: flex
+      width: 22%
+      &:last-child
+        text-align: center
+      img
+        height: 20px
+        margin-left: 10px
 
-
+  mat-list-item
+    position: relative
+    button
+      position: absolute
+      right: 0
+      &:hover
+        background-color: rgba(244, 67, 54, 0.3)
+      img
+        height: 10px
 .create-client
   margin-left: auto
   background-color: #3b9d25

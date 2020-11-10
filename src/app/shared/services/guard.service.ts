@@ -1,8 +1,8 @@
-import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs/internal/Observable";
-import {Injectable} from "@angular/core";
-import {AuthService} from "../services/auth.service";
-import {of} from "rxjs/internal/observable/of";
+import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot} from '@angular/router';
+import {Observable} from 'rxjs/internal/Observable';
+import {Injectable} from '@angular/core';
+import {AuthService} from './auth.service';
+import {of} from 'rxjs/internal/observable/of';
 
 @Injectable({
   providedIn: 'root'

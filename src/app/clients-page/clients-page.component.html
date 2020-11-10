@@ -17,6 +17,9 @@
                   (click)="selectClient($event, client)"
                 >
                   {{ client.name }}
+                  <button mat-icon-button (click)="delete($event, client)" title="Видалити">
+                    <img src="/assets/icons/close.svg">
+                  </button>
                 </mat-list-item>
               </mat-nav-list>
 
@@ -47,7 +50,8 @@
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
           <ng-container *ngIf="connectionsCWW">
-            <h3 class="clients__grid-title">{{currentClientName}} <img src="/assets/icons/arrow.svg"> Підключення CWW</h3>
+            <h3 class="clients__grid-title">{{currentClientName}} <img src="/assets/icons/arrow.svg"> Підключення CWW
+            </h3>
             <mat-card>
 
               <mat-nav-list>
@@ -56,6 +60,7 @@
                     <span>IP</span>
                     <span>Login</span>
                     <span>Password</span>
+                    <span>Status</span>
                   </div>
                 </mat-list-item>
                 <mat-list-item
@@ -66,7 +71,11 @@
                     <span>{{ connection.ip }}</span>
                     <span>{{ connection.login }}</span>
                     <span>{{ connection.pswd }}</span>
+                    <span><img src="/assets/icons/{{ connection.status ? 'success' : 'error' }}.svg"></span>
                   </div>
+                  <button mat-icon-button (click)="delete($event, connection)" title="Видалити">
+                    <img src="/assets/icons/close.svg">
+                  </button>
                 </mat-list-item>
               </mat-nav-list>
 
@@ -99,6 +108,9 @@
                   (click)="selectLocation($event, location)"
                 >
                   {{ location.name }}
+                  <button mat-icon-button (click)="delete($event, location)" title="Видалити">
+                    <img src="/assets/icons/close.svg">
+                  </button>
                 </mat-list-item>
               </mat-nav-list>
 
@@ -130,6 +142,10 @@
                   *ngFor="let department of departments"
                 >
                   {{ department.name }}
+                  <button mat-icon-button (click)="delete($event, department)" title="Видалити">
+                    <img src="/assets/icons/close.svg">
+                  </button>
+
                 </mat-list-item>
               </mat-nav-list>
 
