@@ -25,6 +25,10 @@ export class ClientService {
     return this.http.post<any>(`${environment.apiUrl}/api/${route}`, client);
   }
 
+  delete(id: number, route: string): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/api/${route}/${id}`);
+  }
+
   getConnectionsCWW(id: number): Observable<IConnectionCWW[]> {
     return this.http.get<IConnectionCWW[]>(`${environment.apiUrl}/api/connections/${id}`);
   }

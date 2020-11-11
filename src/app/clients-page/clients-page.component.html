@@ -17,7 +17,7 @@
                   (click)="selectClient($event, client)"
                 >
                   {{ client.name }}
-                  <button mat-icon-button (click)="delete($event, client)" title="Видалити">
+                  <button mat-icon-button (click)="delete($event, client, 'clients')" title="Видалити">
                     <img src="/assets/icons/close.svg">
                   </button>
                 </mat-list-item>
@@ -73,7 +73,7 @@
                     <span>{{ connection.pswd }}</span>
                     <span><img src="/assets/icons/{{ connection.status ? 'success' : 'error' }}.svg"></span>
                   </div>
-                  <button mat-icon-button (click)="delete($event, connection)" title="Видалити">
+                  <button mat-icon-button (click)="delete($event, connection, 'connections')" title="Видалити">
                     <img src="/assets/icons/close.svg">
                   </button>
                 </mat-list-item>
@@ -108,7 +108,7 @@
                   (click)="selectLocation($event, location)"
                 >
                   {{ location.name }}
-                  <button mat-icon-button (click)="delete($event, location)" title="Видалити">
+                  <button mat-icon-button (click)="delete($event, location, 'locations')" title="Видалити">
                     <img src="/assets/icons/close.svg">
                   </button>
                 </mat-list-item>
@@ -142,7 +142,7 @@
                   *ngFor="let department of departments"
                 >
                   {{ department.name }}
-                  <button mat-icon-button (click)="delete($event, department)" title="Видалити">
+                  <button mat-icon-button (click)="delete($event, department, 'departments')" title="Видалити">
                     <img src="/assets/icons/close.svg">
                   </button>
 

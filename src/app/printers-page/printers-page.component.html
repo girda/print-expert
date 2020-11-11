@@ -78,6 +78,7 @@
           class="ag-theme-alpine"
           [gridOptions]="gridService.gridOptions"
           [modules]="modules"
+          (cellValueChanged)="onCellValueChanged($event)"
         >
         </ag-grid-angular>
 
@@ -106,7 +107,8 @@
             class="printers__btn"
             type="button"
             mat-raised-button
-            (click)="getAllRows()"
+            [disabled]="rewritingPrinters.length === 0"
+            (click)="saveTable()"
           >
             Зберегти
           </button>

@@ -50,7 +50,7 @@ export class AgGridService {
           this.gridOptions.api.setRowData([
             {
               client: 'Intertop',
-              city: 'Киев',
+              location: 'Киев',
               department: 'Department',
               model: 'HP-12-PH3478',
               serial_number: '12312341254',
@@ -72,7 +72,7 @@ export class AgGridService {
             },
             {
               client: 'Intertop',
-              city: 'Киев',
+              location: 'Киев',
               department: 'Department',
               model: 'HP-34-PG3479',
               serial_number: '12312341254',

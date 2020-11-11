@@ -25,8 +25,8 @@ export interface IConnectionCWW {
 export interface ILocation {
   id?: number;
   name: string;
-  client_id: number;
-  cwwc_id: number;
+  client_id?: number;
+  cwwc_id?: number;
 }
 
 export interface IDepartment {
@@ -34,4 +34,15 @@ export interface IDepartment {
   name: string;
   location_id?: number;
   client_id?: number;
+}
+
+export interface IRewritingPrinters {
+  printer_id: number;
+  location_name: string;
+  department_name: string;
+  cwwc_id: number;
+  cartridge_resource_bk: string;
+  cartridge_resource_cn: string;
+  cartridge_resource_mg: string;
+  cartridge_resource_yl: string;
 }

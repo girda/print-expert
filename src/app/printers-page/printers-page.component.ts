@@ -7,9 +7,10 @@ import {RichSelectModule} from '@ag-grid-enterprise/rich-select';
 
 import {PrinterService} from '../shared/services/printer.service';
 import {Subscription} from 'rxjs';
-import {IDropdown} from '../shared/interfaces';
+import {IDropdown, IRewritingPrinters} from '../shared/interfaces';
 import {Module} from 'ag-grid-community';
 import {RestService} from '../shared/services/rest.service';
+import {ClientService} from '../shared/services/client.service';
 
 @Component({
   selector: 'app-user-page',
@@ -31,6 +32,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
 
   locations: IDropdown[];
   locationsSubscription: Subscription;
+  locationsWithIdSubscription: Subscription;
   locationsIsReady = true;
 
   departments: IDropdown[];
@@ -41,12 +43,13 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
   printersSubscription: Subscription;
   printersIsReady = true;
 
+  rewritingPrinters: IRewritingPrinters[] = [];
+  rewritingPrintersSubscription: Subscription;
 
   constructor(public gridService: AgGridService,
               private printerService: PrinterService,
-              private rest: RestService) {
-
-    this.gridService.gridOptions.columnDefs = this.printerService.createColumnDefs();
+              private rest: RestService,
+              private clientService: ClientService) {
     this.gridService.gridOptions.context = {componentParent: this};
   }
 
@@ -69,21 +72,67 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
       });
   }
 
+  onCellValueChanged(event): void {
+    let isNewPrinter = true;
+    const currentPrinter = event.data;
+
+    this.rewritingPrinters.forEach(printer => {
+      if (printer.printer_id === currentPrinter.printer_id) {
+        printer.location_name = currentPrinter.location;
+        printer.department_name = currentPrinter.department;
+        printer.cwwc_id = currentPrinter.cwwc_id;
+        printer.cartridge_resource_bk = currentPrinter.cartridge_resource_bk;
+        printer.cartridge_resource_cn = currentPrinter.cartridge_resource_cn;
+        printer.cartridge_resource_mg = currentPrinter.cartridge_resource_mg;
+        printer.cartridge_resource_yl = currentPrinter.cartridge_resource_yl;
+        isNewPrinter = false;
+      }
+    });
+
+    if (isNewPrinter) {
+      this.rewritingPrinters.push({
+        printer_id: currentPrinter.printer_id,
+        location_name: currentPrinter.location,
+        cwwc_id: currentPrinter.cwwc_id,
+        department_name: currentPrinter.department,
+        cartridge_resource_bk: currentPrinter.cartridge_resource_bk,
+        cartridge_resource_cn: currentPrinter.cartridge_resource_cn,
+        cartridge_resource_mg: currentPrinter.cartridge_resource_mg,
+        cartridge_resource_yl: currentPrinter.cartridge_resource_yl
+      });
+    }
+
+    console.log(this.rewritingPrinters);
+  }
+
   onChangeClients(event): void {
     console.log(event);
     const id = event.value.id;
     this.currentClientId = event.value.id;
     this.locationsSubscription = this.printerService.getLocations(id)
-      .subscribe(locations => {
-        this.locations = locations;
-        this.locationsIsReady = false;
-      });
+      .subscribe(
+        locations => {
+          this.locations = locations;
+          this.locationsIsReady = false;
+          this.gridService.gridOptions.columnDefs = this.printerService.createColumnDefs();
+        },
+        error => console.log(error)
+      );
 
     this.departmentsSubscription = this.printerService.getDepartments({client_id: id})
       .subscribe(departments => {
         this.departments = departments;
         this.departmentsIsReady = false;
       });
+
+    this.locationsWithIdSubscription = this.clientService.getLocations(id)
+      .subscribe(
+        locations => {
+          console.log(locations);
+          this.printerService.locations = locations;
+        },
+        error => console.log(error)
+      );
   }
 
   onChangeLocations(event): void {
@@ -132,11 +181,19 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
     this.gridService.gridOptions.api.exportDataAsExcel();
   }
 
-  getAllRows(): void {
+  saveTable(): void {
     this.gridService.gridOptions.api.stopEditing();
-    const rowData = [];
-    this.gridService.gridOptions.api.forEachNode(node => rowData.push(node.data));
-    console.log(rowData);
+    console.log(this.rewritingPrinters);
+    this.rewritingPrintersSubscription = this.printerService.updatePrinters(this.rewritingPrinters)
+      .subscribe(
+        res => {
+          alert(res.message);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+
   }
 
   ngOnDestroy(): void {

@@ -47,25 +47,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
 
     this.dialogSubscription = dialogRef.afterClosed().subscribe(
       () => {
-        switch (params.route) {
-          case 'clients':
-            this.clients$ = this.clientService.getClients();
-            this.connectionsCWW = null;
-            this.locations = null;
-            this.departments = null;
-            break;
-          case 'connections':
-            this.getConnectionsCWW(this.clientService.currentClientId);
-            this.locations = null;
-            this.departments = null;
-            break;
-          case 'locations':
-            this.getLocation(this.clientService.currentConnectionId);
-            this.departments = null;
-            break;
-          case 'departments':
-            this.getDepartments({location_id: this.clientService.currentLocationId});
-        }
+        this.updateView(params.route);
       }
     );
   }
@@ -91,9 +73,23 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
     this.getDepartments({location_id: this.clientService.currentLocationId});
   }
 
-  delete(e, p): void {
-    e.stopPropagation();
-    console.log(p);
+  delete(event: Event, candidate: any, route: string): void {
+    event.stopPropagation();
+    const decision  = window.confirm(`Ви впевнені, що хочете видалити "${candidate.name ? candidate.name : candidate.ip}"?`);
+
+    if (decision) {
+      this.clientService.delete(candidate.id, route).subscribe(
+        res => {
+          alert(res.message);
+          this.updateView(route);
+          console.log(res);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
+
   }
 
   private getConnectionsCWW(id: number): void {
@@ -136,6 +132,28 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       );
+  }
+
+  private updateView(route): void {
+    switch (route) {
+      case 'clients':
+        this.clients$ = this.clientService.getClients();
+        this.connectionsCWW = null;
+        this.locations = null;
+        this.departments = null;
+        break;
+      case 'connections':
+        this.getConnectionsCWW(this.clientService.currentClientId);
+        this.locations = null;
+        this.departments = null;
+        break;
+      case 'locations':
+        this.getLocation(this.clientService.currentConnectionId);
+        this.departments = null;
+        break;
+      case 'departments':
+        this.getDepartments({location_id: this.clientService.currentLocationId});
+    }
   }
 
   ngOnDestroy(): void {

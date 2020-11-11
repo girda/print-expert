@@ -1,7 +1,7 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {IDropdown} from '../interfaces';
+import {IDropdown, ILocation, IRewritingPrinters} from '../interfaces';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 
@@ -10,6 +10,8 @@ import {environment} from '../../../environments/environment';
 })
 
 export class PrinterService {
+
+  locations: ILocation[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +31,10 @@ export class PrinterService {
     return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/printers/${id}`);
   }
 
+  updatePrinters(printers: IRewritingPrinters[]): Observable<any> {
+    return this.http.patch<any[]>(`${environment.apiUrl}/api/printers`, printers);
+  }
+
   createColumnDefs(): any[] {
     return [
       {
@@ -38,15 +44,28 @@ export class PrinterService {
       },
       {
         headerName: 'Город',
-        field: 'city',
+        field: 'location',
         headerTooltip: 'Город',
         filter: true,
         editable: true,
         cellEditor: 'agRichSelectCellEditor',
-        cellEditorParams: {
-          cellHeight: 50,
-          values: ['Ireland', 'USA'],
-        },
+        cellEditorParams: (params) => {
+          console.log(params);
+          const currentLocation: string[] = [];
+          this.locations.forEach(location => {
+            if (params.data.cwwc_id === location.cwwc_id) {
+              currentLocation.push(location.name);
+            }
+          });
+          return {
+            values: currentLocation,
+            cellHeight: 50
+          };
+        }
+        // cellEditorParams: {
+        //   cellHeight: 50,
+        //   values: this.extractValues(this.locations)
+        // },
         // floatingFilter: true,
         // floatingFilterComponentParams: {suppressFilterButton: true}
       },
