@@ -76,6 +76,18 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
     let isNewPrinter = true;
     const currentPrinter = event.data;
 
+    // const colId = event.column.getId();
+    // if (colId === 'location') {
+    //   //   const selectedLocation = event.data.location;
+    //   //   const selectedDepartment = event.data.department;
+    //   //   const allowedDepartments = countyToCityMap(selectedLocation);
+    //   //   const departmentMismatch = allowedDepartments.indexOf(selectedDepartment) < 0;
+    //   //   if (departmentMismatch) {
+    //   event.node.setDataValue('department', null);
+    // }
+    //
+    // }
+
     this.rewritingPrinters.forEach(printer => {
       if (printer.printer_id === currentPrinter.printer_id) {
         printer.location_name = currentPrinter.location;
@@ -122,6 +134,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
     this.departmentsSubscription = this.printerService.getDepartments({client_id: id})
       .subscribe(departments => {
         this.departments = departments;
+        this.printerService.departments = departments;
         this.departmentsIsReady = false;
       });
 

@@ -12,6 +12,7 @@ import {environment} from '../../../environments/environment';
 export class PrinterService {
 
   locations: ILocation[] = [];
+  departments = [];
 
   constructor(private http: HttpClient) {}
 
@@ -74,6 +75,25 @@ export class PrinterService {
         field: 'department',
         headerTooltip: 'Отдел',
         filter: true,
+        editable: (params) => {
+          return params.data.location;
+
+        },
+        cellEditor: 'agRichSelectCellEditor',
+        cellEditorParams: (params) => {
+          console.log(params);
+          console.log(this.departments);
+          const currentDepartments: string[] = [];
+          this.departments.forEach(department => {
+            if (params.data.location_id === department.location_id) {
+              currentDepartments.push(department.name);
+            }
+          });
+          return {
+            values: currentDepartments,
+            cellHeight: 50
+          };
+        }
         // floatingFilter: true,
         // floatingFilterComponentParams: {suppressFilterButton: true}
       },
