@@ -1,11 +1,11 @@
-import {Injectable} from "@angular/core";
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs/internal/Observable";
-import {catchError} from "rxjs/operators";
-import {throwError} from "rxjs/internal/observable/throwError";
-import {Router} from "@angular/router";
+import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs/internal/Observable';
+import {catchError} from 'rxjs/operators';
+import {throwError} from 'rxjs/internal/observable/throwError';
+import {Router} from '@angular/router';
 
-import {AuthService} from "./auth.service";
+import {AuthService} from './auth.service';
 
 
 @Injectable()
@@ -16,19 +16,19 @@ export class TokenInterceptor implements HttpInterceptor {
 
   }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    
+
     if (this.auth.isAuthenticated()) {
       req = req.clone({
         setHeaders: {
           Authorization: this.auth.getToken()
         }
-      })
+      });
     }
     return next.handle(req).pipe(
       catchError(
         (error: HttpErrorResponse) => this.handelAuthError(error)
       )
-    )
+    );
   }
 
   private handelAuthError(error: HttpErrorResponse): Observable<any> {
@@ -37,7 +37,7 @@ export class TokenInterceptor implements HttpInterceptor {
         queryParams: {
           sessionFailed: true
         }
-      })
+      });
     }
 
     return throwError(error);

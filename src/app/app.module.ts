@@ -25,13 +25,14 @@ import {MatTableModule} from '@angular/material/table';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {AdminPageComponent} from './admin-page/admin-page.component';
 import {PrintersPageComponent} from './printers-page/printers-page.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {SelectSearchComponent} from './shared/components/select-search/select-search.component';
 import {AgGridModule} from 'ag-grid-angular';
 import {ClientsPageComponent} from './clients-page/clients-page.component';
 import {PopupComponent} from './shared/components/popup/popup.component';
+import {TokenInterceptor} from './shared/services/token-interceptor.service';
 
 
 @NgModule({
@@ -71,8 +72,16 @@ import {PopupComponent} from './shared/components/popup/popup.component';
     AgGridModule.withComponents([])
   ],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'ua'}
-    ],
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'ua'
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      multi: true,
+      useClass: TokenInterceptor
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

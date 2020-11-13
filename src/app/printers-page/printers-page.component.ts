@@ -76,17 +76,22 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
     let isNewPrinter = true;
     const currentPrinter = event.data;
 
-    // const colId = event.column.getId();
-    // if (colId === 'location') {
-    //   //   const selectedLocation = event.data.location;
-    //   //   const selectedDepartment = event.data.department;
-    //   //   const allowedDepartments = countyToCityMap(selectedLocation);
-    //   //   const departmentMismatch = allowedDepartments.indexOf(selectedDepartment) < 0;
-    //   //   if (departmentMismatch) {
-    //   event.node.setDataValue('department', null);
-    // }
-    //
-    // }
+    this.printerService.locations.forEach(location => {
+      if (location.name === currentPrinter.location) {
+        currentPrinter.location_id = location.id;
+      }
+    });
+
+    const colId = event.column.getId();
+    if (colId === 'location') {
+        const selectedLocation = event.data.location;
+        const selectedDepartment = event.data.department;
+        const allowedDepartments = this.printerService.locationToDepartmentMap(selectedLocation);
+        const departmentMismatch = allowedDepartments.indexOf(selectedDepartment) < 0;
+        if (departmentMismatch) {
+          event.node.setDataValue('department', null);
+        }
+    }
 
     this.rewritingPrinters.forEach(printer => {
       if (printer.printer_id === currentPrinter.printer_id) {
@@ -131,18 +136,29 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
         error => console.log(error)
       );
 
-    this.departmentsSubscription = this.printerService.getDepartments({client_id: id})
-      .subscribe(departments => {
-        this.departments = departments;
-        this.printerService.departments = departments;
-        this.departmentsIsReady = false;
-      });
 
     this.locationsWithIdSubscription = this.clientService.getLocations(id)
       .subscribe(
         locations => {
           console.log(locations);
           this.printerService.locations = locations;
+          this.departmentsSubscription = this.printerService.getDepartments({client_id: id})
+            .subscribe(departments => {
+              this.departments = departments;
+              this.printerService.departments = departments;
+              this.departmentsIsReady = false;
+              this.printerService.mapDepartments = {};
+              this.printerService.locations.forEach(location => {
+                this.printerService.mapDepartments[location.name] = [];
+                this.printerService.departments.forEach(department => {
+                  if (department.location_id === location.id) {
+                    this.printerService.mapDepartments[location.name].push(department.name);
+                  }
+                });
+              });
+
+              console.log(this.printerService.mapDepartments);
+            });
         },
         error => console.log(error)
       );
@@ -172,7 +188,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  getTable(event: Event): void {
+  getTable(event?: Event): void {
     if (!this.gridService.isReadyTable) {
       this.gridService.isReadyTable = true;
       this.gridService.init(`${environment.apiUrl}/api/table`, this.formFilters.value);
@@ -201,6 +217,8 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
       .subscribe(
         res => {
           alert(res.message);
+          this.gridService.isReadyTable = false;
+          this.getTable();
         },
         error => {
           console.log(error);

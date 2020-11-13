@@ -13,6 +13,7 @@ export class PrinterService {
 
   locations: ILocation[] = [];
   departments = [];
+  mapDepartments;
 
   constructor(private http: HttpClient) {}
 
@@ -34,6 +35,10 @@ export class PrinterService {
 
   updatePrinters(printers: IRewritingPrinters[]): Observable<any> {
     return this.http.patch<any[]>(`${environment.apiUrl}/api/printers`, printers);
+  }
+
+  locationToDepartmentMap(match): string[] {
+    return this.mapDepartments[match];
   }
 
   createColumnDefs(): any[] {
@@ -77,7 +82,6 @@ export class PrinterService {
         filter: true,
         editable: (params) => {
           return params.data.location;
-
         },
         cellEditor: 'agRichSelectCellEditor',
         cellEditorParams: (params) => {
