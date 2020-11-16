@@ -11,6 +11,7 @@ export interface IDropdown {
 export interface IClient {
   id?: number;
   name: string;
+  active?: boolean;
 }
 
 export interface IConnectionCWW {
@@ -20,6 +21,7 @@ export interface IConnectionCWW {
   client_id: number;
   id?: number;
   status: number;
+  active?: boolean;
 }
 
 export interface ILocation {
@@ -27,6 +29,7 @@ export interface ILocation {
   name: string;
   client_id?: number;
   cwwc_id?: number;
+  active?: boolean;
 }
 
 export interface IDepartment {

@@ -47,53 +47,6 @@ export class AgGridService {
         },
         error => {
           console.log(error)
-          this.gridOptions.api.setRowData([
-            {
-              client: 'Intertop',
-              location: 'Киев',
-              department: 'Department',
-              model: 'HP-12-PH3478',
-              serial_number: '12312341254',
-              ip: '192.168.0.1',
-              page_count: '12345',
-              quantity_black: '30%',
-              quantity_cn: '30%',
-              quantity_mg: '30%',
-              quantity_yl: '30%',
-              average_coverage_bl: '30%',
-              average_coverage_cn: '30%',
-              average_coverage_mg: '30%',
-              average_coverage_yl: '30%',
-              average_coverage_all: '30%',
-              cartridge_resource_bl: '',
-              cartridge_resource_cn: '',
-              cartridge_resource_mg: '',
-              cartridge_resource_yl: ''
-            },
-            {
-              client: 'Intertop',
-              location: 'Киев',
-              department: 'Department',
-              model: 'HP-34-PG3479',
-              serial_number: '12312341254',
-              ip: '192.168.0.2',
-              page_count: '12225',
-              quantity_black: '30%',
-              quantity_cn: '30%',
-              quantity_mg: '30%',
-              quantity_yi: '30%',
-              average_coverage_bl: '30%',
-              average_coverage_cn: '30%',
-              average_coverage_mg: '30%',
-              average_coverage_yi: '30%',
-              average_coverage_all: '30%',
-              cartridge_resource_bl: '',
-              cartridge_resource_cn: '',
-              cartridge_resource_mg: '',
-              cartridge_resource_yi: ''
-            }
-          ]);
-          this.gridOptions.api.sizeColumnsToFit();
         }
       );
     };

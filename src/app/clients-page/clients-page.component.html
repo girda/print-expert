@@ -8,21 +8,23 @@
         <div class="clients__grid-item">
           <h3 class="clients__grid-title">Кліенти</h3>
 
-          <ng-container *ngIf="clients$ | async as clients; else loaderClients">
+          <ng-container *ngIf="clients">
             <mat-card>
-
-              <mat-nav-list>
-                <mat-list-item
-                  *ngFor="let client of clients"
-                  (click)="selectClient($event, client)"
-                >
-                  {{ client.name }}
-                  <button mat-icon-button (click)="delete($event, client, 'clients')" title="Видалити">
-                    <img src="/assets/icons/close.svg">
-                  </button>
-                </mat-list-item>
-              </mat-nav-list>
-
+              <h3 class="mat-card-title">Назва</h3>
+              <div class="mat-card-inner">
+                <mat-nav-list>
+                  <mat-list-item
+                    *ngFor="let client of clients"
+                    (click)="selectClient($event, client)"
+                    [class.active]="client.active"
+                  >
+                    {{ client.name }}
+                    <button mat-icon-button (click)="delete($event, client, 'clients')" title="Видалити">
+                      <img src="/assets/icons/close.svg">
+                    </button>
+                  </mat-list-item>
+                </mat-nav-list>
+              </div>
               <div class="clients__btn">
                 <button
                   class="create-client"
@@ -49,71 +51,26 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="connectionsCWW">
-            <h3 class="clients__grid-title">{{currentClientName}} <img src="/assets/icons/arrow.svg"> Підключення CWW
-            </h3>
-            <mat-card>
-
-              <mat-nav-list>
-                <mat-list-item disabled>
-                  <div class="clients__table">
-                    <span>IP</span>
-                    <span>Login</span>
-                    <span>Password</span>
-                    <span>Status</span>
-                  </div>
-                </mat-list-item>
-                <mat-list-item
-                  *ngFor="let connection of connectionsCWW"
-                  (click)="selectConnection($event, connection)"
-                >
-                  <div class="clients__table">
-                    <span>{{ connection.ip }}</span>
-                    <span>{{ connection.login }}</span>
-                    <span>{{ connection.pswd }}</span>
-                    <span><img src="/assets/icons/{{ connection.status ? 'success' : 'error' }}.svg"></span>
-                  </div>
-                  <button mat-icon-button (click)="delete($event, connection, 'connections')" title="Видалити">
-                    <img src="/assets/icons/close.svg">
-                  </button>
-                </mat-list-item>
-              </mat-nav-list>
-
-              <div class="clients__btn">
-                <button
-                  class="create-client"
-                  type="button"
-                  mat-raised-button
-                  color="primary"
-                  (click)="openPopup(paramsConnection)"
-                >
-                  Створити підключення CWW
-                </button>
-              </div>
-
-            </mat-card>
-          </ng-container>
-        </div>
-        <!-- END  clients__grid-item -->
-
-        <!-- START  clients__grid-item -->
-        <div class="clients__grid-item">
           <ng-container *ngIf="locations">
-            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>
+<!--            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>-->
+            <h3 class="clients__grid-title">Міста</h3>
 
             <mat-card>
-              <mat-nav-list>
-                <mat-list-item
-                  *ngFor="let location of locations"
-                  (click)="selectLocation($event, location)"
-                >
-                  {{ location.name }}
-                  <button mat-icon-button (click)="delete($event, location, 'locations')" title="Видалити">
-                    <img src="/assets/icons/close.svg">
-                  </button>
-                </mat-list-item>
-              </mat-nav-list>
-
+              <h3 class="mat-card-title">Назва</h3>
+              <div class="mat-card-inner">
+                <mat-nav-list>
+                  <mat-list-item
+                    *ngFor="let location of locations"
+                    (click)="selectLocation($event, location)"
+                    [class.active]="location.active"
+                  >
+                    {{ location.name }}
+                    <button mat-icon-button (click)="delete($event, location, 'locations')" title="Видалити">
+                      <img src="/assets/icons/close.svg">
+                    </button>
+                  </mat-list-item>
+                </mat-nav-list>
+              </div>
               <div class="clients__btn">
                 <button
                   class="create-client"
@@ -133,22 +90,76 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
+          <ng-container *ngIf="connectionsCWW">
+<!--            <h3 class="clients__grid-title">{{currentClientName}} <img src="/assets/icons/arrow.svg"> Підключення CWW</h3>-->
+            <h3 class="clients__grid-title">Підключення CWW</h3>
+            <mat-card>
+              <h3 class="mat-card-title">
+                <div class="mat-card-title__cols">
+                  <span>IP</span>
+                  <span>Login</span>
+                  <span>Password</span>
+                  <span>Status</span>
+                </div>
+              </h3>
+              <div class="mat-card-inner">
+                <mat-nav-list>
+
+                  <mat-list-item
+                    *ngFor="let connection of connectionsCWW"
+                    (click)="selectConnection($event, connection)"
+                    [class.active]="connection.active"
+                  >
+                    <div class="clients__table">
+                      <span>{{ connection.ip }}</span>
+                      <span>{{ connection.login }}</span>
+                      <span>{{ connection.pswd }}</span>
+                      <span><img src="/assets/icons/{{ connection.status ? 'success' : 'error' }}.svg"></span>
+                    </div>
+                    <button mat-icon-button (click)="delete($event, connection, 'connections')" title="Видалити">
+                      <img src="/assets/icons/close.svg">
+                    </button>
+                  </mat-list-item>
+                </mat-nav-list>
+              </div>
+              <div class="clients__btn">
+                <button
+                  class="create-client"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="openPopup(paramsConnection)"
+                >
+                  Створити підключення CWW
+                </button>
+              </div>
+
+            </mat-card>
+          </ng-container>
+        </div>
+        <!-- END  clients__grid-item -->
+
+        <!-- START  clients__grid-item -->
+        <div class="clients__grid-item">
           <ng-container *ngIf="departments">
-            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>
+<!--            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>-->
+            <h3 class="clients__grid-title">Відділи</h3>
 
             <mat-card>
-              <mat-nav-list>
-                <mat-list-item
-                  *ngFor="let department of departments"
-                >
-                  {{ department.name }}
-                  <button mat-icon-button (click)="delete($event, department, 'departments')" title="Видалити">
-                    <img src="/assets/icons/close.svg">
-                  </button>
+              <h3 class="mat-card-title">Назва</h3>
+              <div class="mat-card-inner">
+                <mat-nav-list>
+                  <mat-list-item
+                    *ngFor="let department of departments"
+                  >
+                    {{ department.name }}
+                    <button mat-icon-button (click)="delete($event, department, 'departments')" title="Видалити">
+                      <img src="/assets/icons/close.svg">
+                    </button>
 
-                </mat-list-item>
-              </mat-nav-list>
-
+                  </mat-list-item>
+                </mat-nav-list>
+              </div>
               <div class="clients__btn">
                 <button
                   class="create-client"

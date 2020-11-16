@@ -11,30 +11,29 @@ body
 
 .grid-cell-centered .ag-header-cell-label, .grid-cell-centered .ag-header-group-cell-label
   justify-content: center
+.grid-cell-border
+  border-left: 1px solid #cfd2ce
 
-.bg-blue
-  background-color: $blue
-  color: white
-.bg-green
-  background-color: $green
-  color: white
-.bg-black
-  background-color: black
-  color: white
-.bg-purple
-  background-color: #800080
-  color: white
-.bg-cyan
+.pseudo-black, .pseudo-cyan, .pseudo-magenta, .pseudo-yellow
+  &:after
+    content: ''
+    position: absolute
+    bottom: 0
+    left: 0
+    width: 70px
+    height: 6px
+    background-color: black
+.pseudo-cyan:after
   background-color: #00FFFF
-.bg-magenta
+.pseudo-magenta:after
   background-color: #FF00FF
-  color: white
-.bg-yellow
+
+.pseudo-yellow:after
   background-color: yellow
 .mat-form-field-appearance-fill .mat-form-field-flex
   background-color: transparent
 .container
-  width: 1600px
+  width: 1700px
   margin: 0 auto
 
 .auth-block
@@ -56,3 +55,6 @@ body
 
 .mat-radio-label
     height: 100%
+.ag-theme-alpine .ag-cell, .ag-theme-alpine .ag-header-cell
+  padding-left: 8px
+  padding-right: 8px

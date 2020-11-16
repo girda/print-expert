@@ -2,12 +2,12 @@
   padding-top: 60px
   &__title
     font-size: 28px
-    text-align: center
+    //text-align: center
     margin-bottom: 30px
 
   &__btn
     display: flex
-    margin-top: 30px
+    margin-top: 16px
 
   &__grid
     display: flex
@@ -19,8 +19,8 @@
     &-title
       display: flex
       align-items: center
-      justify-content: center
-      font-size: 22px
+      //justify-content: center
+      font-size: 18px
       img
         height: 20px
         margin: 0 10px
@@ -33,6 +33,9 @@
     width: 100%
     display: flex
     align-items: center
+
+    &--title
+      font-size: 14px
 
     span
       display: flex
@@ -56,6 +59,33 @@
   margin-left: auto
   background-color: #3b9d25
 
+.mat-card
+  height: 340px
+
+.mat-card-title
+  display: flex
+  align-items: center
+  height: 48px
+  padding: 0 16px
+  font-size: 14px
+  font-weight: 500
+  margin: 0
+  background-color: #d0cfcf
+  &__cols
+    display: flex
+    width: calc(100% - 18px)
+    span
+      display: flex
+      width: 22%
+      &:last-child
+        text-align: center
+      img
+        height: 20px
+        margin-left: 10px
+
+.mat-card-inner
+  height: 207px
+  overflow-y: scroll
 
 .mat-list-item-content
   align-items: center
@@ -66,3 +96,5 @@
   width: 100%
   height: 100%
 
+mat-list-item.active
+  background-color: #eeeeee

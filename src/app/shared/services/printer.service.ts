@@ -1,4 +1,3 @@
-
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {IDropdown, ILocation, IRewritingPrinters} from '../interfaces';
@@ -15,7 +14,8 @@ export class PrinterService {
   departments = [];
   mapDepartments;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   getClients(): Observable<IDropdown[]> {
     return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/clients`);
@@ -44,113 +44,115 @@ export class PrinterService {
   createColumnDefs(): any[] {
     return [
       {
-        headerName: 'Клиент',
-        field: 'client',
-        headerTooltip: 'Клиент'
-      },
-      {
-        headerName: 'Город',
-        field: 'location',
-        headerTooltip: 'Город',
-        filter: true,
-        editable: true,
-        cellEditor: 'agRichSelectCellEditor',
-        cellEditorParams: (params) => {
-          console.log(params);
-          const currentLocation: string[] = [];
-          this.locations.forEach(location => {
-            if (params.data.cwwc_id === location.cwwc_id) {
-              currentLocation.push(location.name);
+        headerName: 'Атрибути принтерів',
+        headerClass: 'grid-cell-centered ',
+        headerTooltip: 'Атрибути принтерів',
+        children: [
+          {
+            headerName: 'Клієнт',
+            field: 'client',
+            headerTooltip: 'Клієнт'
+          },
+          {
+            headerName: 'Місто',
+            field: 'location',
+            headerTooltip: 'Місто',
+            filter: true,
+            editable: true,
+            cellStyle: { backgroundColor: '#f3f3c3' },
+            cellEditor: 'agRichSelectCellEditor',
+            cellEditorParams: (params) => {
+              console.log(params);
+              const currentLocation: string[] = [];
+              this.locations.forEach(location => {
+                if (params.data.cwwc_id === location.cwwc_id) {
+                  currentLocation.push(location.name);
+                }
+              });
+              return {
+                values: currentLocation,
+                cellHeight: 50
+              };
             }
-          });
-          return {
-            values: currentLocation,
-            cellHeight: 50
-          };
-        }
-        // cellEditorParams: {
-        //   cellHeight: 50,
-        //   values: this.extractValues(this.locations)
-        // },
-        // floatingFilter: true,
-        // floatingFilterComponentParams: {suppressFilterButton: true}
-      },
-      {
-        headerName: 'Отдел',
-        field: 'department',
-        headerTooltip: 'Отдел',
-        filter: true,
-        editable: (params) => {
-          return params.data.location;
-        },
-        cellEditor: 'agRichSelectCellEditor',
-        cellEditorParams: (params) => {
-          console.log(params);
-          console.log(this.departments);
-          const currentDepartments: string[] = [];
-          this.departments.forEach(department => {
-            if (params.data.location_id === department.location_id) {
-              currentDepartments.push(department.name);
+          },
+          {
+            headerName: 'Відділ',
+            field: 'department',
+            headerTooltip: 'Відділ',
+            cellStyle: { backgroundColor: '#f3f3c3' },
+            filter: true,
+            editable: (params) => {
+              return params.data.location;
+            },
+            cellEditor: 'agRichSelectCellEditor',
+            cellEditorParams: (params) => {
+              console.log(params);
+              console.log(this.departments);
+              const currentDepartments: string[] = [];
+              this.departments.forEach(department => {
+                if (params.data.location_id === department.location_id) {
+                  currentDepartments.push(department.name);
+                }
+              });
+              return {
+                values: currentDepartments,
+                cellHeight: 50
+              };
             }
-          });
-          return {
-            values: currentDepartments,
-            cellHeight: 50
-          };
-        }
-        // floatingFilter: true,
-        // floatingFilterComponentParams: {suppressFilterButton: true}
+            // floatingFilter: true,
+            // floatingFilterComponentParams: {suppressFilterButton: true}
+          },
+          {
+            headerName: 'Модель',
+            field: 'model',
+            headerTooltip: 'Модель'
+          },
+          {
+            headerName: 'Серійний №',
+            field: 'serial_number',
+            headerTooltip: 'Серійний №'
+          },
+          {
+            headerName: 'IP',
+            field: 'ip',
+            headerTooltip: 'IP',
+            width: 70
+          },
+          {
+            headerName: 'К-сть сторінок',
+            field: 'page_count',
+            headerTooltip: 'Кількість роздрукованих сторінок'
+          }]
       },
       {
-        headerName: 'Модель',
-        field: 'model',
-        headerTooltip: 'Модель'
-      },
-      {
-        headerName: 'Серийный номер',
-        field: 'serial_number',
-        headerTooltip: 'Серийный номер'
-      },
-      {
-        headerName: 'IP',
-        field: 'ip',
-        headerTooltip: 'IP',
-        width: 70
-      },
-      {
-        headerName: 'Количество распечатанных страниц',
-        field: 'page_count',
-        headerTooltip: 'Количество распечатанных страниц'
-      },
-      {
-        headerName: 'Количество замен картриджей',
-        headerClass: 'grid-cell-centered bg-blue',
-        headerTooltip: 'Количество замен картриджей',
+        headerName: 'Кількість замін картриджів',
+        headerClass: 'grid-cell-centered grid-cell-border',
+        headerTooltip: 'Кількість замін картриджів',
         children: [
           {
             headerName: 'Black',
-            headerClass: 'grid-cell-centered bg-black',
+            headerClass: 'grid-cell-centered pseudo-black',
             field: 'quantity_black',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'CN',
-            headerClass: 'grid-cell-centered bg-cyan',
+            headerClass: 'grid-cell-centered pseudo-cyan',
             field: 'quantity_cn',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'MG',
-            headerClass: 'grid-cell-centered bg-magenta',
+            headerClass: 'grid-cell-centered pseudo-magenta',
             field: 'quantity_mg',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'YL',
-            headerClass: 'grid-cell-centered bg-yellow',
+            headerClass: 'grid-cell-centered pseudo-yellow',
             field: 'quantity_yl',
             width: 70,
             cellStyle: {textAlign: 'center'}
@@ -158,82 +160,82 @@ export class PrinterService {
         ]
       },
       {
-        headerName: 'Ресурс картриджа',
-        headerClass: 'grid-cell-centered bg-purple',
-        headerTooltip: 'Ресурс картриджа',
+        headerName: 'Ресурс картриджу',
+        headerClass: 'grid-cell-centered grid-cell-border',
+        headerTooltip: 'Ресурс картриджу',
         children: [
           {
             headerName: 'Black',
-            headerClass: 'grid-cell-centered bg-black',
+            headerClass: 'grid-cell-centered pseudo-black',
             field: 'cartridge_resource_bk',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
           },
           {
             headerName: 'CN',
-            headerClass: 'grid-cell-centered bg-cyan',
+            headerClass: 'grid-cell-centered pseudo-cyan',
             field: 'cartridge_resource_cn',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
           },
           {
             headerName: 'MG',
-            headerClass: 'grid-cell-centered bg-magenta',
+            headerClass: 'grid-cell-centered pseudo-magenta',
             field: 'cartridge_resource_mg',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
           },
           {
             headerName: 'YL',
-            headerClass: 'grid-cell-centered bg-yellow',
+            headerClass: 'grid-cell-centered pseudo-yellow',
             field: 'cartridge_resource_yl',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
           }
         ]
       },
       {
-        headerName: 'Среднее заполнение страниц',
-        headerClass: 'grid-cell-centered bg-green',
-        headerTooltip: 'Среднее заполнение страниц',
+        headerName: 'Середнє заповнення сторінок',
+        headerClass: 'grid-cell-centered grid-cell-border',
+        headerTooltip: 'Середнє заповнення сторінок',
         children: [
           {
             headerName: 'Black',
-            headerClass: 'grid-cell-centered bg-black',
+            headerClass: 'grid-cell-centered pseudo-black',
             field: 'average_coverage_bk',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'CN',
-            headerClass: 'grid-cell-centered bg-cyan',
+            headerClass: 'grid-cell-centered pseudo-cyan',
             field: 'average_coverage_cn',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'MG',
-            headerClass: 'grid-cell-centered bg-magenta',
+            headerClass: 'grid-cell-centered pseudo-magenta',
             field: 'average_coverage_mg',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
             headerName: 'YL',
-            headerClass: 'grid-cell-centered bg-yellow',
+            headerClass: 'grid-cell-centered pseudo-yellow',
             field: 'average_coverage_yl',
             width: 70,
             cellStyle: {textAlign: 'center'}
           },
           {
-            headerName: 'Всего',
+            headerName: 'Всього',
             headerClass: 'grid-cell-centered',
             field: 'average_coverage_all',
-            width: 70,
+            width: 120,
             cellStyle: {textAlign: 'center'}
           }
         ]

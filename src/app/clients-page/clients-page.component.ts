@@ -4,7 +4,6 @@ import {Observable, Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PopupComponent} from '../shared/components/popup/popup.component';
 import {ClientService} from '../shared/services/client.service';
-import {PrinterService} from '../shared/services/printer.service';
 import {AgGridService} from '../shared/services/ag-grid.sevice';
 
 @Component({
@@ -15,7 +14,8 @@ import {AgGridService} from '../shared/services/ag-grid.sevice';
 
 export class ClientsPageComponent implements OnInit, OnDestroy {
 
-  clients$: Observable<IClient[]>;
+  clients: IClient[];
+  clientsSubscription: Subscription;
   currentClientName: string;
   paramsClient = {name: 'Кліент', title: 'Створити нового кліента', route: 'clients'};
 
@@ -42,7 +42,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.clients$ = this.clientService.getClients();
+    this.getClients();
     this.gridService.isReadyTable = false;
   }
 
@@ -57,21 +57,36 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   }
 
   selectClient(event, client): void {
-    console.log(client);
+    this.clients.forEach(c => {
+      if (c.active) {
+        c.active = false;
+      }
+    });
+    client.active = true;
     this.clientService.currentClientId = client.id;
     this.currentClientName = client.name;
     this.getConnectionsCWW(client.id);
   }
 
   selectConnection(event, connection): void {
-    console.log(connection);
+    this.connectionsCWW.forEach(c => {
+      if (c.active) {
+        c.active = false;
+      }
+    });
+    connection.active = true;
     this.currentConnectionIP = connection.ip;
     this.clientService.currentConnectionId = connection.id;
     this.getLocation(connection.id);
   }
 
   selectLocation(event, location): void {
-    console.log(location);
+    this.locations.forEach(l => {
+      if (l.active) {
+        l.active = false;
+      }
+    });
+    location.active = true;
     this.currentLocationName = location.name;
     this.clientService.currentLocationId = location.id;
     this.getDepartments({location_id: this.clientService.currentLocationId});
@@ -94,6 +109,17 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
       );
     }
 
+  }
+
+  private getClients(): void {
+    this.clientsSubscription = this.clientService.getClients().subscribe(
+      clients => {
+        this.clients = clients;
+        this.connectionsCWW = null;
+        this.locations = null;
+        this.departments = null;
+      }
+    );
   }
 
   private getConnectionsCWW(id: number): void {
@@ -141,19 +167,13 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   private updateView(route): void {
     switch (route) {
       case 'clients':
-        this.clients$ = this.clientService.getClients();
-        this.connectionsCWW = null;
-        this.locations = null;
-        this.departments = null;
+        this.getClients();
         break;
       case 'connections':
         this.getConnectionsCWW(this.clientService.currentClientId);
-        this.locations = null;
-        this.departments = null;
         break;
       case 'locations':
         this.getLocation(this.clientService.currentConnectionId);
-        this.departments = null;
         break;
       case 'departments':
         this.getDepartments({location_id: this.clientService.currentLocationId});
@@ -172,6 +192,9 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
     }
     if (this.dialogSubscription) {
       this.dialogSubscription.unsubscribe();
+    }
+    if (this.clientsSubscription) {
+      this.clientsSubscription.unsubscribe();
     }
   }
 
