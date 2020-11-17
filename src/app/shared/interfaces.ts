@@ -1,6 +1,9 @@
 export interface IUser {
-  email: string;
+  login: string;
   password: string;
+  filters?: string;
+  role?: number;
+  id?: number;
 }
 
 export interface IDropdown {

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {IDropdown, ILocation, IRewritingPrinters} from '../interfaces';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {AgGridService} from './ag-grid.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class PrinterService {
   departments = [];
   mapDepartments;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              public gridService: AgGridService) {
   }
 
   getClients(): Observable<IDropdown[]> {
@@ -39,6 +41,12 @@ export class PrinterService {
 
   locationToDepartmentMap(match): string[] {
     return this.mapDepartments[match];
+  }
+
+  initAgGrid(params): void {
+    this.gridService.gridOptions.columnDefs = this.createColumnDefs();
+    this.gridService.isReadyTable = true;
+    this.gridService.init(`${environment.apiUrl}/api/table`, params);
   }
 
   createColumnDefs(): any[] {

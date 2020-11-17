@@ -46,7 +46,7 @@ export class AgGridService {
           this.gridOptions.api.setRowData(rowData);
         },
         error => {
-          console.log(error)
+          console.log(error);
         }
       );
     };

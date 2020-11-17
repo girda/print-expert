@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AgGridService} from '../shared/services/ag-grid.sevice';
+import {AgGridService} from '../shared/services/ag-grid.service';
 import {environment} from '../../environments/environment';
 import {ExcelExportModule} from '@ag-grid-enterprise/excel-export';
 import {RichSelectModule} from '@ag-grid-enterprise/rich-select';
@@ -11,6 +11,7 @@ import {IDropdown, IRewritingPrinters} from '../shared/interfaces';
 import {Module} from 'ag-grid-community';
 import {RestService} from '../shared/services/rest.service';
 import {ClientService} from '../shared/services/client.service';
+import {UserService} from '../shared/services/user.service';
 
 @Component({
   selector: 'app-user-page',
@@ -39,17 +40,15 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
   departmentsSubscription: Subscription;
   departmentsIsReady = true;
 
-  printers: IDropdown[];
-  printersSubscription: Subscription;
-  printersIsReady = true;
-
   rewritingPrinters: IRewritingPrinters[] = [];
   rewritingPrintersSubscription: Subscription;
 
+  filtersSubscription: Subscription;
   constructor(public gridService: AgGridService,
               private printerService: PrinterService,
               private rest: RestService,
-              private clientService: ClientService) {
+              private clientService: ClientService,
+              private userService: UserService) {
     this.gridService.gridOptions.context = {componentParent: this};
   }
 
@@ -58,7 +57,6 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
       client: new FormControl(null, [Validators.required]),
       location: new FormControl(null),
       department: new FormControl(null),
-      printers: new FormControl(null),
       range: this.range = new FormGroup({
         start: new FormControl(null, [Validators.required]),
         end: new FormControl(null, [Validators.required])
@@ -70,6 +68,30 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
         this.clients = clients;
         this.clientsIsReady = false;
       });
+
+    if (this.userService.filters) {
+      this.printerService.initAgGrid(this.userService.filters);
+    } else {
+      this.filtersSubscription = this.userService.getFilters()
+        .subscribe(
+          filters => {
+            this.userService.filters = JSON.parse(filters);
+            this.printerService.initAgGrid(this.userService.filters);
+
+            this.formFilters.patchValue({
+              client: this.userService.filters.client,
+              range: {
+                start: this.userService.filters.range.start,
+                end: this.userService.filters.range.end
+              }
+            });
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+
   }
 
   onCellValueChanged(event): void {
@@ -124,8 +146,8 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
 
   onChangeClients(event): void {
     console.log(event);
-    const id = event.value.id;
-    this.currentClientId = event.value.id;
+    const id = event.value;
+    this.currentClientId = event.value;
     this.locationsSubscription = this.printerService.getLocations(id)
       .subscribe(
         locations => {
@@ -135,7 +157,6 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
         },
         error => console.log(error)
       );
-
 
     this.locationsWithIdSubscription = this.clientService.getLocations(id)
       .subscribe(
@@ -178,16 +199,6 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  onChangeDepartments(event): void {
-    console.log(event);
-    const id = event.value.id;
-    this.printersSubscription = this.printerService.getPrinters(id)
-      .subscribe(printers => {
-        this.printers = printers;
-        this.printersIsReady = false;
-      });
-  }
-
   getTable(event?: Event): void {
     if (!this.gridService.isReadyTable) {
       this.gridService.isReadyTable = true;
@@ -199,6 +210,8 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
         });
     }
 
+    this.userService.setFilters(this.formFilters.value, this.userService.id)
+      .subscribe(res => console.log(res));
     console.log(this.formFilters.value);
   }
 
@@ -206,7 +219,7 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
     this.gridService.gridOptions.api.exportDataAsCsv();
   }
 
-  onBtnExportExcle(): void {
+  onBtnExportExcel(): void {
     this.gridService.gridOptions.api.exportDataAsExcel();
   }
 
@@ -224,12 +237,23 @@ export class PrintersPageComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       );
-
   }
 
   ngOnDestroy(): void {
     if (this.clientsSubscription) {
       this.clientsSubscription.unsubscribe();
+    }
+    if (this.locationsSubscription) {
+      this.locationsSubscription.unsubscribe();
+    }
+    if (this.locationsWithIdSubscription) {
+      this.locationsWithIdSubscription.unsubscribe();
+    }
+    if (this.departmentsSubscription) {
+      this.departmentsSubscription.unsubscribe();
+    }
+    if (this.filtersSubscription) {
+      this.filtersSubscription.unsubscribe();
     }
   }
 

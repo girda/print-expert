@@ -6,6 +6,7 @@
       placeholder="{{placeholder}}"
       (selectionChange)="onChange($event)"
       disabled="{{disabled}}"
+      [(value)]="selected"
     >
       <mat-option>
         <ngx-mat-select-search
@@ -13,7 +14,7 @@
           [formControl]="search"
         ></ngx-mat-select-search>
       </mat-option>
-      <mat-option *ngFor="let option of options" [value]="option">
+      <mat-option *ngFor="let option of options" [value]="option.id">
         {{option.name}}
       </mat-option>
     </mat-select>

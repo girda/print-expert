@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
@@ -13,7 +13,8 @@ export class SelectSearchComponent implements OnInit {
   @Input() formGroup: FormGroup;
   @Input() controlName: string;
   @Input() disabled: boolean;
-  @Output() change = new EventEmitter();
+  @Input() selected: any;
+  @Output() changeEvent = new EventEmitter();
 
   search: FormControl = new FormControl();
 
@@ -23,6 +24,6 @@ export class SelectSearchComponent implements OnInit {
   }
 
   onChange(event): void {
-    this.change.emit(event);
+    this.changeEvent.emit(event);
   }
 }

@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {IUser} from '../interfaces';
 import {tap} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
+import {UserService} from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import {environment} from '../../../environments/environment';
 export class AuthService {
   private token = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private userService: UserService) {
 
   }
 
@@ -19,19 +21,26 @@ export class AuthService {
     return this.http.post<IUser>(`${environment.apiUrl}/api/auth/register`, user);
   }
 
-  login(user: IUser): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${environment.apiUrl}/api/auth/login`, user)
+  login(user: IUser): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/auth/login`, user)
       .pipe(
         tap(
-          ({token}) => {
-            localStorage.setItem('auth-token', token);
-            this.setToken(token);
+          userData => {
+            localStorage.setItem('auth-token', userData.token);
+            this.setToken(userData.token);
+
+            localStorage.setItem('role', userData.role);
+            localStorage.setItem('user-id', userData.id);
+            localStorage.setItem('filters', userData.filters);
+            this.userService.filters = userData.filters;
+            this.userService.id = userData.id;
+            this.userService.role = userData.role;
           }
         )
       );
   }
 
-  setToken(token: string) {
+  setToken(token: string): void {
     this.token = token;
   }
 
@@ -43,7 +52,7 @@ export class AuthService {
     return !!this.token;
   }
 
-  logout() {
+  logout(): void {
     this.setToken(null);
     localStorage.clear();
   }
