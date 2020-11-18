@@ -33,6 +33,8 @@ import {AgGridModule} from 'ag-grid-angular';
 import {ClientsPageComponent} from './clients-page/clients-page.component';
 import {PopupComponent} from './shared/components/popup/popup.component';
 import {TokenInterceptor} from './shared/services/token-interceptor.service';
+import { FiltersComponent } from './printers-page/filters/filters.component';
+import { UsersPageComponent } from './users-page/users-page.component';
 
 
 @NgModule({
@@ -45,7 +47,9 @@ import {TokenInterceptor} from './shared/services/token-interceptor.service';
     PrintersPageComponent,
     SelectSearchComponent,
     ClientsPageComponent,
-    PopupComponent
+    PopupComponent,
+    FiltersComponent,
+    UsersPageComponent
   ],
   imports: [
     BrowserModule,

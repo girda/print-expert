@@ -1,0 +1,64 @@
+<form
+  [formGroup]="formFilters"
+  (ngSubmit)="getTable()"
+  class="filters">
+  <div class="filters__item">
+    <app-select-search
+      placeholder="Клієнт *"
+      controlName="client"
+      [disabled]="clientsIsReady"
+      [formGroup]="formFilters"
+      [options]="clients"
+      (changeEvent)="onChangeClients($event)"
+    ></app-select-search>
+  </div>
+
+  <div class="filters__item">
+    <app-select-search
+      placeholder="Місто"
+      controlName="location"
+      [disabled]="locationsIsReady"
+      [formGroup]="formFilters"
+      [options]="locations"
+      (changeEvent)="onChangeLocations($event)"
+    ></app-select-search>
+  </div>
+  <div class="filters__item">
+    <app-select-search
+      placeholder="Відділ"
+      controlName="department"
+      [disabled]="departmentsIsReady"
+      [formGroup]="formFilters"
+      [options]="departments"
+    ></app-select-search>
+  </div>
+
+  <div class="filters__item">
+    <mat-form-field appearance="fill">
+      <mat-label>Введіть діапазон дат *</mat-label>
+      <mat-date-range-input
+        [formGroup]="range"
+        [rangePicker]="picker"
+      >
+        <input matStartDate formControlName="start" placeholder="Початок">
+        <input matEndDate formControlName="end" placeholder="Кiнець">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Недійсна дата початку</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Недійсна дата завершення</mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="filters__btn">
+    <button
+      type="submit"
+      [disabled]="formFilters.invalid || formFilters.disabled"
+      mat-raised-button
+      color="primary"
+    >
+      Знайти
+    </button>
+  </div>
+</form>

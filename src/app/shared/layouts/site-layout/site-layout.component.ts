@@ -11,7 +11,8 @@ export class SiteLayoutComponent {
 
   links: any[] = [
     {name: 'Принтери', url: 'printers'},
-    {name: 'Кліенти', url: 'clients'}
+    {name: 'Кліенти', url: 'clients'},
+    {name: 'Користувачі', url: 'users'}
   ];
 
   constructor(private auth: AuthService,
@@ -21,9 +22,6 @@ export class SiteLayoutComponent {
     event.preventDefault();
     this.auth.logout();
     this.router.navigate(['/login']);
-  }
-  showInfo(link) {
-    console.log(link);
   }
 
 }

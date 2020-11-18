@@ -9,6 +9,7 @@ import { SiteLayoutComponent } from './shared/layouts/site-layout/site-layout.co
 import {LoginPageComponent} from './login-page/login-page.component';
 import {PrintersPageComponent} from './printers-page/printers-page.component';
 import {ClientsPageComponent} from './clients-page/clients-page.component';
+import {UsersPageComponent} from './users-page/users-page.component';
 
 const routes: Routes = [{
   path: '',
@@ -24,7 +25,8 @@ const routes: Routes = [{
     canActivate: [GuardServices],
     children: [
       { path: 'printers', component: PrintersPageComponent },
-      { path: 'clients', component: ClientsPageComponent }
+      { path: 'clients', component: ClientsPageComponent },
+      { path: 'users', component: UsersPageComponent }
     ]
   }];
 

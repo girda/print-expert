@@ -21,17 +21,9 @@ export class AgGridService {
     this.gridOptions = {
       defaultColDef: {
         width: 100,
-        // floatingFilterComponentParams: {suppressFilterButton: true},
-        // filter: true,
-        // floatingFilter: true,
-        // filterParams: {
-        //   // debounceMs: 1500,
-        //   buttons: ['apply'],
-        // }
       },
       rowSelection: 'single',
       tooltipShowDelay: 500,
-      // rowModelType: 'infinite',
       localeText: this.localeText
     };
   }

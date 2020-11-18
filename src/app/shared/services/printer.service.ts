@@ -14,6 +14,7 @@ export class PrinterService {
   locations: ILocation[] = [];
   departments = [];
   mapDepartments;
+  paramsForGetTable;
 
   constructor(private http: HttpClient,
               public gridService: AgGridService) {
@@ -29,10 +30,6 @@ export class PrinterService {
 
   getDepartments(where: any): Observable<IDropdown[]> {
     return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/departments/${JSON.stringify(where)}`);
-  }
-
-  getPrinters(id: number): Observable<IDropdown[]> {
-    return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/printers/${id}`);
   }
 
   updatePrinters(printers: IRewritingPrinters[]): Observable<any> {
