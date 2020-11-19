@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
     const protectionToken = localStorage.getItem('auth-token');
     const protectionRole = localStorage.getItem('role');
     const protectionUserId = localStorage.getItem('user-id');
+    const protectionClientId = localStorage.getItem('client-id');
 
     if (protectionToken !== null) {
       this.auth.setToken(protectionToken);
@@ -28,6 +29,10 @@ export class AppComponent implements OnInit {
 
     if (protectionUserId !== null) {
       this.userService.setUserId(JSON.parse(protectionUserId));
+    }
+
+    if (protectionClientId !== null) {
+      this.userService.setClient(JSON.parse(protectionClientId));
     }
   }
 }

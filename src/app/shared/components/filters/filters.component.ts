@@ -1,13 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {IDropdown} from '../../shared/interfaces';
+import {IDropdown} from '../../interfaces';
 import {Subscription} from 'rxjs';
-import {environment} from '../../../environments/environment';
-import {AgGridService} from '../../shared/services/ag-grid.service';
-import {PrinterService} from '../../shared/services/printer.service';
-import {RestService} from '../../shared/services/rest.service';
-import {ClientService} from '../../shared/services/client.service';
-import {UserService} from '../../shared/services/user.service';
+import {environment} from '../../../../environments/environment';
+import {AgGridService} from '../../services/ag-grid.service';
+import {PrinterService} from '../../services/printer.service';
+import {RestService} from '../../services/rest.service';
+import {ClientService} from '../../services/client.service';
+import {UserService} from '../../services/user.service';
+import {KeysService} from '../../services/keys.service';
 
 @Component({
   selector: 'app-filters',
@@ -35,11 +36,14 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filtersSubscription: Subscription;
 
+  isClient = false;
+
   constructor(public gridService: AgGridService,
               private printerService: PrinterService,
               private rest: RestService,
               private clientService: ClientService,
-              private userService: UserService) {}
+              private userService: UserService,
+              private keys: KeysService) {}
 
   ngOnInit(): void {
     this.formFilters = new FormGroup({
@@ -52,11 +56,21 @@ export class FiltersComponent implements OnInit, OnDestroy {
       })
     });
 
-    this.clientsSubscription = this.printerService.getClients()
-      .subscribe(clients => {
-        this.clients = clients;
-        this.clientsIsReady = false;
-      });
+    if (this.userService.getRole() === this.keys.roles.client.id) {
+      this.isClient = true;
+      this.getLocationsForFilter(this.userService.getClient());
+      this.locationsIsReady = false;
+      this.formFilters.get('client').clearValidators();
+      this.formFilters.get('client').updateValueAndValidity();
+    } else {
+
+      this.clientsSubscription = this.printerService.getClients()
+        .subscribe(clients => {
+          this.clients = clients;
+          this.clientsIsReady = false;
+        });
+    }
+
 
     if (this.userService.filters) {
       this.updateFilters();
@@ -65,7 +79,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
         .subscribe(
           filters => {
             this.userService.filters = JSON.parse(filters);
-            this.updateFilters();
+            if (this.userService.filters) {
+              this.updateFilters();
+            }
           },
           error => {
             console.log(error);
@@ -99,11 +115,17 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   getTable(): void {
     this.printerService.paramsForGetTable = this.formFilters.value;
+    const params = this.formFilters.value;
+
+    if (this.userService.getRole() === this.keys.roles.client.id) {
+      params.client = this.userService.getClient();
+    }
+
     if (!this.gridService.isReadyTable) {
       this.gridService.isReadyTable = true;
-      this.gridService.init(`${environment.apiUrl}/api/table`, this.formFilters.value);
+      this.gridService.init(`${environment.apiUrl}/api/table`, params);
     } else {
-      this.rest.post(`${environment.apiUrl}/api/table`, this.formFilters.value)
+      this.rest.post(`${environment.apiUrl}/api/table`, params)
         .subscribe(rowData => {
           this.gridService.gridOptions.api.setRowData(rowData);
         });

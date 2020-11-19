@@ -4,6 +4,8 @@ import {IDropdown, ILocation, IRewritingPrinters} from '../interfaces';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {AgGridService} from './ag-grid.service';
+import {UserService} from './user.service';
+import {KeysService} from './keys.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,9 @@ export class PrinterService {
   paramsForGetTable;
 
   constructor(private http: HttpClient,
-              public gridService: AgGridService) {
+              public gridService: AgGridService,
+              private userService: UserService,
+              private keys: KeysService) {
   }
 
   getClients(): Observable<IDropdown[]> {
@@ -47,7 +51,7 @@ export class PrinterService {
   }
 
   createColumnDefs(): any[] {
-    return [
+    const columnDefs = [
       {
         headerName: 'Атрибути принтерів',
         headerClass: 'grid-cell-centered ',
@@ -62,12 +66,10 @@ export class PrinterService {
             headerName: 'Місто',
             field: 'location',
             headerTooltip: 'Місто',
-            filter: true,
             editable: true,
             cellStyle: { backgroundColor: '#f3f3c3' },
             cellEditor: 'agRichSelectCellEditor',
             cellEditorParams: (params) => {
-              console.log(params);
               const currentLocation: string[] = [];
               this.locations.forEach(location => {
                 if (params.data.cwwc_id === location.cwwc_id) {
@@ -85,14 +87,11 @@ export class PrinterService {
             field: 'department',
             headerTooltip: 'Відділ',
             cellStyle: { backgroundColor: '#f3f3c3' },
-            filter: true,
             editable: (params) => {
               return params.data.location;
             },
             cellEditor: 'agRichSelectCellEditor',
             cellEditorParams: (params) => {
-              console.log(params);
-              console.log(this.departments);
               const currentDepartments: string[] = [];
               this.departments.forEach(department => {
                 if (params.data.location_id === department.location_id) {
@@ -104,8 +103,6 @@ export class PrinterService {
                 cellHeight: 50
               };
             }
-            // floatingFilter: true,
-            // floatingFilterComponentParams: {suppressFilterButton: true}
           },
           {
             headerName: 'Модель',
@@ -246,5 +243,18 @@ export class PrinterService {
         ]
       }
     ];
+
+    if (this.userService.getRole() !== this.keys.roles.admin.id) {
+      columnDefs.forEach(columnGroup => {
+        columnGroup.children.forEach(column => {
+          if (column.editable) {
+            delete column.editable;
+            delete column.cellStyle;
+          }
+        });
+      });
+    }
+
+    return columnDefs;
   }
 }

@@ -2,7 +2,7 @@
   [formGroup]="formFilters"
   (ngSubmit)="getTable()"
   class="filters">
-  <div class="filters__item">
+  <div class="filters__item" *ngIf="!isClient">
     <app-select-search
       placeholder="Клієнт *"
       controlName="client"

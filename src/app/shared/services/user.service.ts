@@ -13,6 +13,7 @@ export class UserService implements IUser {
   id;
   role;
   filters = null;
+  client;
 
   constructor(private http: HttpClient) {}
 
@@ -22,6 +23,14 @@ export class UserService implements IUser {
 
   setRole(role: number): void {
     this.role = role;
+  }
+
+  getClient(): number {
+    return this.client;
+  }
+
+  setClient(client: number): void {
+    this.client = client;
   }
 
   getUserId(): number {

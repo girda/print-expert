@@ -1,1 +1,45 @@
-<p>user-printers-page works!</p>
+<div class="printers">
+  <div class="container">
+    <div class="printers__in">
+
+      <app-filters></app-filters>
+
+      <ng-container *ngIf="gridService.isReadyTable">
+
+        <ag-grid-angular
+          style="width: 100%; height: 600px;"
+          class="ag-theme-alpine"
+          [gridOptions]="gridService.gridOptions"
+          [modules]="modules"
+        >
+        </ag-grid-angular>
+
+        <div class="printers__btns">
+          <button
+            class="printers__btn"
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="onBtnExportCSV()"
+          >
+            Завантажити CSV файл
+          </button>
+
+          <button
+            class="printers__btn"
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="onBtnExportExcel()"
+          >
+            Завантажити Excel файл
+          </button>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
+  </div>
+</div>

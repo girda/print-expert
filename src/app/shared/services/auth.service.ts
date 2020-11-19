@@ -31,9 +31,12 @@ export class AuthService {
 
             localStorage.setItem('role', userData.role);
             localStorage.setItem('user-id', userData.id);
+            localStorage.setItem('client-id', userData.client);
+
             this.userService.filters = JSON.parse(userData.filters);
             this.userService.id = userData.id;
             this.userService.role = userData.role;
+            this.userService.client = userData.client;
           }
         )
       );
