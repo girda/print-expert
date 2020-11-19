@@ -3,6 +3,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
+import {UserService} from '../shared/services/user.service';
+import {KeysService} from '../shared/services/keys.service';
 
 @Component({
   selector: 'app-login-page',
@@ -16,7 +18,9 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private auth: AuthService,
-              private router: Router) { }
+              private router: Router,
+              private userService: UserService,
+              private keys: KeysService) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -25,28 +29,38 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     });
 
     this.route.queryParams.subscribe((params: Params) => {
-      if (params['accessDenied']) {
+      if (params.accessDenied) {
         alert('Для початку потрібно зареєструватися в системі');
+      } else if (params.incorrectRole) {
+        alert('У вас недостатньо прав, зверніться до адміністратора');
       }
-    })
+    });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.aSub) {
-      this.aSub.unsubscribe()
+      this.aSub.unsubscribe();
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.form.disable();
 
     this.aSub = this.auth.login(this.form.value).subscribe(
-      () => this.router.navigate(['/printers']),
+      () => {
+        if (this.userService.getRole() === this.keys.roles.admin.id) {
+          this.router.navigate(['/printers']);
+        } else if (this.userService.getRole() === this.keys.roles.client.id) {
+          this.router.navigate(['/client-printers']);
+        } else if (this.userService.getRole() === this.keys.roles.user.id) {
+          this.router.navigate(['/user-printers']);
+        }
+      },
       error => {
         alert(error.error.message);
         this.form.enable();
       }
-    )
+    );
   }
 
 }

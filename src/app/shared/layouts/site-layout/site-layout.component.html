@@ -4,17 +4,19 @@
       <div class="header__logo">Print Expert</div>
 
       <ul class="header__nav nav">
-        <li
-          *ngFor="let link of links"
-          class="nav__item"
-          routerLinkActive="is-active"
-        >
-          <a
-            routerLink="/{{link.url}}"
+        <ng-container *ngIf="isAdmin">
+          <li
+            *ngFor="let link of links"
+            class="nav__item"
+            routerLinkActive="is-active"
           >
-            {{link.name}}
-          </a>
-        </li>
+            <a
+              routerLink="/{{link.url}}"
+            >
+              {{link.name}}
+            </a>
+          </li>
+        </ng-container>
 
         <li class="nav__item">
           <a

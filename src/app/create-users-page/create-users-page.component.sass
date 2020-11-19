@@ -1,0 +1,48 @@
+.create-users
+
+  &__form
+    display: flex
+    flex-direction: column
+
+  &__row
+    margin-bottom: 20px
+    width: 300px
+
+  &__btn
+    display: flex
+    margin-top: 16px
+    button
+      margin-left: auto
+      background-color: #3b9d25
+
+  &__table
+    height: 700px
+
+  &__table-row:nth-child(odd)
+    background-color: #f9f9e8
+  &__table-row:nth-child(even)
+    background-color: #fcfcfc
+  &__table-title
+    display: flex
+    align-items: center
+    height: 48px
+    padding: 0 16px
+    font-size: 14px
+    font-weight: 500
+    margin: 0
+    background-color: #d0cfcf
+  &__cols
+    display: flex
+    width: calc(100% - 18px)
+    span
+      display: flex
+      width: 22%
+      &:last-child
+        text-align: center
+      img
+        height: 20px
+        margin-left: 10px
+
+  &__table-inner
+    height: 567px
+    overflow-y: scroll

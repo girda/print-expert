@@ -21,12 +21,13 @@ export class AppComponent implements OnInit {
       this.auth.setToken(protectionToken);
     }
 
-    if (protectionRole !== null) {
-      this.userService.setRole(protectionRole);
+    if (protectionRole !== null ) {
+      this.userService.setRole(JSON.parse(protectionRole));
+      console.log(this.userService.getRole());
     }
 
     if (protectionUserId !== null) {
-      this.userService.setUserId(protectionUserId);
+      this.userService.setUserId(JSON.parse(protectionUserId));
     }
   }
 }

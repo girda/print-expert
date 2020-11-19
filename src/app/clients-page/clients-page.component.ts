@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {IClient, IConnectionCWW, IDepartment, ILocation} from '../shared/interfaces';
-import {Observable, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PopupComponent} from '../shared/components/popup/popup.component';
 import {ClientService} from '../shared/services/client.service';
-import {AgGridService} from '../shared/services/ag-grid.service';
 
 @Component({
   selector: 'app-clients-page',
@@ -36,14 +35,12 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   dialogSubscription: Subscription;
 
   constructor(private clientService: ClientService,
-              private gridService: AgGridService,
               public matDialog: MatDialog) {
   }
 
 
   ngOnInit(): void {
     this.getClients();
-    this.gridService.isReadyTable = false;
   }
 
   openPopup(params): void {

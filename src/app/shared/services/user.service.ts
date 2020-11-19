@@ -12,15 +12,15 @@ export class UserService implements IUser {
   password;
   id;
   role;
-  filters;
+  filters = null;
 
   constructor(private http: HttpClient) {}
 
-  getRole(): string {
+  getRole(): number {
     return this.role;
   }
 
-  setRole(role: string): void {
+  setRole(role: number): void {
     this.role = role;
   }
 
@@ -28,7 +28,7 @@ export class UserService implements IUser {
     return this.id;
   }
 
-  setUserId(id: string): void {
+  setUserId(id: number): void {
     this.id = id;
   }
 
@@ -39,5 +39,13 @@ export class UserService implements IUser {
   setFilters(filters: any, userId: number): Observable<any> {
     this.filters = filters;
     return this.http.patch<any>(`${environment.apiUrl}/api/filters/${userId}`, filters);
+  }
+
+  getAll(): Observable<IUser[]> {
+    return this.http.get<IUser[]>(`${environment.apiUrl}/api/users`);
+  }
+
+  create(user: IUser): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/users`, user);
   }
 }

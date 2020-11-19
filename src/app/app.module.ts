@@ -23,7 +23,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatTableModule} from '@angular/material/table';
 import {MatGridListModule} from '@angular/material/grid-list';
-import {AdminPageComponent} from './admin-page/admin-page.component';
 import {PrintersPageComponent} from './printers-page/printers-page.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatSelectModule} from '@angular/material/select';
@@ -33,8 +32,11 @@ import {AgGridModule} from 'ag-grid-angular';
 import {ClientsPageComponent} from './clients-page/clients-page.component';
 import {PopupComponent} from './shared/components/popup/popup.component';
 import {TokenInterceptor} from './shared/services/token-interceptor.service';
-import { FiltersComponent } from './printers-page/filters/filters.component';
-import { UsersPageComponent } from './users-page/users-page.component';
+import {FiltersComponent} from './printers-page/filters/filters.component';
+import {CreateUsersPageComponent} from './create-users-page/create-users-page.component';
+import {PopupCreateUserComponent} from './shared/components/popup-create-user/popup-create-user.component';
+import { ClientPrintersPageComponent } from './client-printers-page/client-printers-page.component';
+import { UserPrintersPageComponent } from './user-printers-page/user-printers-page.component';
 
 
 @NgModule({
@@ -43,13 +45,15 @@ import { UsersPageComponent } from './users-page/users-page.component';
     LoginPageComponent,
     AuthLayoutComponent,
     SiteLayoutComponent,
-    AdminPageComponent,
     PrintersPageComponent,
     SelectSearchComponent,
     ClientsPageComponent,
     PopupComponent,
     FiltersComponent,
-    UsersPageComponent
+    CreateUsersPageComponent,
+    PopupCreateUserComponent,
+    ClientPrintersPageComponent,
+    UserPrintersPageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,54 @@
+<div class="create-users">
+  <div class="container">
+    <div class="create-users__in">
+      <h2 class="create-users__title title">Користувачі</h2>
+
+
+
+      <mat-card class="create-users__table">
+        <h3 class="create-users__table-title">
+          <div class="create-users__cols">
+            <span>Логін</span>
+            <span>Роль</span>
+            <span>Кліент</span>
+            <span>Email</span>
+            <span>ПІБ</span>
+          </div>
+        </h3>
+        <div class="create-users__table-inner">
+          <mat-list>
+
+            <mat-list-item
+              *ngFor="let user of users; let i = index"
+              class="create-users__table-row"
+            >
+              <div class="create-users__cols">
+                <span>{{ user.login }}</span>
+                <span>{{ user.role }}</span>
+                <span>{{ user.client }}</span>
+                <span>{{ user.email }}</span>
+                <span>{{ user.name }}</span>
+<!--                <span><img src="/assets/icons/{{ connection.status ? 'success' : 'error' }}.svg"></span>-->
+              </div>
+<!--              <button mat-icon-button (click)="delete($event, connection, 'connections')" title="Видалити">-->
+<!--                <img src="/assets/icons/close.svg">-->
+<!--              </button>-->
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div class="create-users__btn">
+          <button
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="openPopup()"
+          >
+            Створити користувача
+          </button>
+        </div>
+
+      </mat-card>
+
+    </div>
+  </div>
+</div>

@@ -1,9 +1,12 @@
 export interface IUser {
   login: string;
-  password: string;
+  password?: string;
   filters?: string;
-  role?: number;
+  role?: number | string;
   id?: number;
+  client?: number | string;
+  email?: string;
+  name?: string;
 }
 
 export interface IDropdown {

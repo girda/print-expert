@@ -11,7 +11,7 @@ export class AuthLayoutComponent implements OnInit {
   form: FormGroup;
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
   }
 

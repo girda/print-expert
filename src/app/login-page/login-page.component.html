@@ -30,7 +30,7 @@
         <mat-error *ngIf="form.get('password').errors['required']">Пароль не повинен бути порожнім</mat-error>
         <mat-error
           *ngIf="form.get('password').errors['minlength'] && form.get('password').errors['minlength']['requiredLength']">
-          Пароль повинен бути більше {{form.get('password').errors['minlength']['requiredLength']}} символів.
+          Пароль повинен бути менше {{form.get('password').errors['minlength']['requiredLength']}} символів.
           Зараз {{form.get('password').errors['minlength']['actualLength']}}.
         </mat-error>
       </mat-error>

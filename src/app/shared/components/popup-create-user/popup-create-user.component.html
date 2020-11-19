@@ -1,0 +1,102 @@
+<form
+  [formGroup]="form"
+  class="form"
+  (ngSubmit)="onSubmit()"
+>
+
+  <h3 class="form__title">Новий користувач</h3>
+
+  <mat-form-field class="form__row">
+    <mat-label>Логін *</mat-label>
+    <input
+      formControlName="login"
+      matInput
+      type="text"
+      placeholder="Логін *"
+    >
+    <mat-error *ngIf="form.get('login').invalid && form.get('login').touched">
+      <mat-error *ngIf="form.get('login').errors['required']">Поле не повинно бути порожнім</mat-error>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__row">
+    <mat-label>Пароль *</mat-label>
+    <input
+      formControlName="password"
+      matInput
+      type="text"
+      placeholder="Пароль *"
+    >
+    <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
+      <mat-error *ngIf="form.get('password').errors['required']">Поле не повинно бути порожнім</mat-error>
+      <mat-error
+        *ngIf="form.get('password').errors['minlength'] && form.get('password').errors['minlength']['requiredLength']">
+        Пароль повинен бути менше {{form.get('password').errors['minlength']['requiredLength']}} символів.
+        Зараз {{form.get('password').errors['minlength']['actualLength']}}.
+      </mat-error>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__row">
+    <mat-label>Email</mat-label>
+    <input
+      formControlName="email"
+      matInput
+      type="text"
+      placeholder="Email"
+    >
+    <mat-error *ngIf="form.get('email').invalid && form.get('email').touched">
+      <mat-error *ngIf="form.get('email').errors['email']">Введіть коректний email адресу</mat-error>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="form__row">
+    <mat-label>ПІБ</mat-label>
+    <input
+      formControlName="name"
+      matInput
+      type="text"
+      placeholder="ПІБ"
+    >
+  </mat-form-field>
+
+  <div class="form__row">
+    <app-select-search
+      placeholder="Роль *"
+      controlName="role"
+      [disabled]="false"
+      [formGroup]="form"
+      [options]="roles"
+      (changeEvent)="onChangeRole($event)"
+    ></app-select-search>
+  </div>
+
+  <div class="form__row" [hidden]="flagHiddenClient">
+    <app-select-search
+      placeholder="Кліент *"
+      controlName="client"
+      [disabled]="false"
+      [formGroup]="form"
+      [options]="clients"
+    ></app-select-search>
+  </div>
+
+  <div class="form__btns">
+    <button
+      type="button"
+      (click)="onCancel()"
+      mat-raised-button
+    >
+      Скасувати
+    </button>
+    <button
+      type="submit"
+      [disabled]="form.invalid || form.disabled"
+      mat-raised-button
+      color="primary"
+    >
+      Створити
+    </button>
+  </div>
+
+</form>
