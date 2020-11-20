@@ -15,6 +15,12 @@
     >
     <mat-error *ngIf="form.get('name').invalid && form.get('name').touched">
       <mat-error *ngIf="form.get('name').errors['required']">Поле не повинно бути порожнім</mat-error>
+      <ng-container *ngIf="data.login; else name">
+        <mat-error *ngIf="form.get('name').errors['unavailable']">IP повинно бути унікальним</mat-error>
+      </ng-container>
+      <ng-template #name>
+        <mat-error *ngIf="form.get('name').errors['unavailable']">Ім'я повинно бути унікальним</mat-error>
+      </ng-template>
     </mat-error>
   </mat-form-field>
 

@@ -16,21 +16,21 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   clients: IClient[];
   clientsSubscription: Subscription;
   currentClientName: string;
-  paramsClient = {name: 'Кліент', title: 'Створити нового кліента', route: 'clients'};
+  paramsClient = {name: 'Кліент', title: 'Створити нового кліента', route: 'clients', values: null};
 
   connectionsCWWSubscription: Subscription;
   connectionsCWW: IConnectionCWW[];
   currentConnectionIP: string;
-  paramsConnection = {name: 'IP', title: 'Створити нове підключення', login: 'Логін', password: 'Пароль', route: 'connections'};
+  paramsConnection = {name: 'IP', title: 'Створити нове підключення', login: 'Логін', password: 'Пароль', route: 'connections', values: null};
 
   locations: ILocation[];
   locationsSubscription: Subscription;
   currentLocationName: string;
-  paramsLocation = {name: 'Місто', title: 'Створити нове місто', route: 'locations'};
+  paramsLocation = {name: 'Місто', title: 'Створити нове місто', route: 'locations', values: null};
 
   departments: IDepartment[];
   departmentsSubscription: Subscription;
-  paramsDepartment = {name: 'Відділ', title: 'Створити новий відділ', route: 'departments'};
+  paramsDepartment = {name: 'Відділ', title: 'Створити новий відділ', route: 'departments', values: null};
 
   dialogSubscription: Subscription;
 
@@ -115,6 +115,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
         this.connectionsCWW = null;
         this.locations = null;
         this.departments = null;
+        this.paramsClient.values = this.clients;
       }
     );
   }
@@ -127,6 +128,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
           this.connectionsCWW = connections;
           this.locations = null;
           this.departments = null;
+          this.paramsConnection.values = this.connectionsCWW;
         },
         error => {
           console.log(error);
@@ -141,6 +143,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
           console.log(connections);
           this.locations = connections;
           this.departments = null;
+          this.paramsLocation.values = this.locations;
         },
         error => {
           console.log(error);
@@ -154,6 +157,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
         departments => {
           console.log(departments);
           this.departments = departments;
+          this.paramsDepartment.values = this.departments;
         },
         error => {
           console.log(error);
