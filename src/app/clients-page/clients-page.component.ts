@@ -1,6 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {IClient, IConnectionCWW, IDepartment, ILocation} from '../shared/interfaces';
-import {Subscription} from 'rxjs';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {fromEvent, Observable, Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PopupComponent} from '../shared/components/popup/popup.component';
 import {ClientService} from '../shared/services/client.service';
@@ -11,36 +10,37 @@ import {ClientService} from '../shared/services/client.service';
   styleUrls: ['./clients-page.component.sass']
 })
 
-export class ClientsPageComponent implements OnInit, OnDestroy {
+export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  clients: IClient[];
   clientsSubscription: Subscription;
   currentClientName: string;
   paramsClient = {name: 'Кліент', title: 'Створити нового кліента', route: 'clients', values: null};
+  @ViewChild('searchClient', { read: ElementRef })  searchClientRef: ElementRef;
+  searchClient$: Observable<string>;
 
   connectionsCWWSubscription: Subscription;
-  connectionsCWW: IConnectionCWW[];
   currentConnectionIP: string;
   paramsConnection = {name: 'IP', title: 'Створити нове підключення', login: 'Логін', password: 'Пароль', route: 'connections', values: null};
 
-  locations: ILocation[];
   locationsSubscription: Subscription;
   currentLocationName: string;
   paramsLocation = {name: 'Місто', title: 'Створити нове місто', route: 'locations', values: null};
 
-  departments: IDepartment[];
   departmentsSubscription: Subscription;
   paramsDepartment = {name: 'Відділ', title: 'Створити новий відділ', route: 'departments', values: null};
 
   dialogSubscription: Subscription;
 
-  constructor(private clientService: ClientService,
+  constructor(public clientService: ClientService,
               public matDialog: MatDialog) {
   }
 
-
   ngOnInit(): void {
     this.getClients();
+  }
+
+  ngAfterViewInit(): void {
+    this.searchClient$ = fromEvent(this.searchClientRef.nativeElement, 'input');
   }
 
   openPopup(params): void {
@@ -54,7 +54,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   }
 
   selectClient(event, client): void {
-    this.clients.forEach(c => {
+    this.clientService.clients.forEach(c => {
       if (c.active) {
         c.active = false;
       }
@@ -66,7 +66,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   }
 
   selectConnection(event, connection): void {
-    this.connectionsCWW.forEach(c => {
+    this.clientService.connectionsCWW.forEach(c => {
       if (c.active) {
         c.active = false;
       }
@@ -78,7 +78,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   }
 
   selectLocation(event, location): void {
-    this.locations.forEach(l => {
+    this.clientService.locations.forEach(l => {
       if (l.active) {
         l.active = false;
       }
@@ -111,11 +111,8 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
   private getClients(): void {
     this.clientsSubscription = this.clientService.getClients().subscribe(
       clients => {
-        this.clients = clients;
-        this.connectionsCWW = null;
-        this.locations = null;
-        this.departments = null;
-        this.paramsClient.values = this.clients;
+        this.clientService.clients = clients;
+        this.paramsClient.values = this.clientService.clients;
       }
     );
   }
@@ -125,10 +122,8 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
       .subscribe(
         connections => {
           console.log(connections);
-          this.connectionsCWW = connections;
-          this.locations = null;
-          this.departments = null;
-          this.paramsConnection.values = this.connectionsCWW;
+          this.clientService.connectionsCWW = connections;
+          this.paramsConnection.values = this.clientService.connectionsCWW;
         },
         error => {
           console.log(error);
@@ -141,9 +136,8 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
       .subscribe(
         connections => {
           console.log(connections);
-          this.locations = connections;
-          this.departments = null;
-          this.paramsLocation.values = this.locations;
+          this.clientService.locations = connections;
+          this.paramsLocation.values = this.clientService.locations;
         },
         error => {
           console.log(error);
@@ -156,8 +150,8 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
       .subscribe(
         departments => {
           console.log(departments);
-          this.departments = departments;
-          this.paramsDepartment.values = this.departments;
+          this.clientService.departments = departments;
+          this.paramsDepartment.values = this.clientService.departments;
         },
         error => {
           console.log(error);

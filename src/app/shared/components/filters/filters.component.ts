@@ -23,16 +23,16 @@ export class FiltersComponent implements OnInit, OnDestroy {
   clients: IDropdown[];
   currentClientId: number;
   clientsSubscription: Subscription;
-  clientsIsReady = true;
+  clientsIsReady = false;
 
   locations: IDropdown[];
   locationsSubscription: Subscription;
   locationsWithIdSubscription: Subscription;
-  locationsIsReady = true;
+  locationsIsReady = false;
 
   departments: IDropdown[];
   departmentsSubscription: Subscription;
-  departmentsIsReady = true;
+  departmentsIsReady = false;
 
   filtersSubscription: Subscription;
 
@@ -59,7 +59,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     if (this.userService.getRole() === this.keys.roles.client.id) {
       this.isClient = true;
       this.getLocationsForFilter(this.userService.getClient());
-      this.locationsIsReady = false;
       this.formFilters.get('client').clearValidators();
       this.formFilters.get('client').updateValueAndValidity();
     } else {
@@ -67,7 +66,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.clientsSubscription = this.printerService.getClients()
         .subscribe(clients => {
           this.clients = clients;
-          this.clientsIsReady = false;
+          this.clientsIsReady = true;
         });
     }
 
@@ -97,19 +96,29 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
     this.getLocationsForFilter(id);
     this.getLocationsAndDepartmentsForTable(id);
+
+    this.formFilters.patchValue({
+      location: null,
+      department: null
+    });
+    this.departmentsIsReady = false;
   }
 
   onChangeLocations(event): void {
-    console.log(event);
+    const currentClientId = this.currentClientId;
+
     const where = {
-      name: event.value.name,
-      client_id: this.currentClientId
+      name: event.value,
+      client_id: currentClientId
     };
-    console.log(where);
+
     this.departmentsSubscription = this.printerService.getDepartments(where)
       .subscribe(departments => {
+        this.formFilters.patchValue({
+          department: null
+        });
         this.departments = departments;
-        this.departmentsIsReady = false;
+        this.departmentsIsReady = true;
       });
   }
 
@@ -136,18 +145,26 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   updateFilters(): void {
-    const currentClientId = this.userService.filters.client;
-    this.getLocationsForFilter(currentClientId);
-    this.getLocationsAndDepartmentsForTable(currentClientId);
+    this.currentClientId = this.userService.filters.client;
+
+    this.getLocationsForFilter(this.currentClientId);
+    this.getLocationsAndDepartmentsForTable(this.currentClientId);
+
     this.printerService.initAgGrid(this.userService.filters);
 
     this.formFilters.patchValue({
       client: this.userService.filters.client,
+      location: this.userService.filters.location,
+      department: this.userService.filters.department,
       range: {
         start: this.userService.filters.range.start,
         end: this.userService.filters.range.end
       }
     });
+
+    if (this.userService.filters.location) {
+      this.departmentsIsReady = true;
+    }
 
     this.printerService.paramsForGetTable = this.formFilters.value;
   }
@@ -183,7 +200,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       .subscribe(
         locations => {
           this.locations = locations;
-          this.locationsIsReady = false;
+          this.locationsIsReady = true;
           this.gridService.gridOptions.columnDefs = this.printerService.createColumnDefs();
         },
         error => console.log(error)

@@ -13,7 +13,7 @@
         placeholder="Логин"
       >
       <mat-error *ngIf="form.get('login').invalid && form.get('password').touched">
-        <mat-error *ngIf="form.get('login').errors['required']">Login не повинен бути порожнім</mat-error>
+        <mat-error *ngIf="form.get('login').errors['required']">Логин не повинен бути порожнім</mat-error>
         <!-- <mat-error *ngIf="form.get('login').errors['login']">Введіть коректний email адресу</mat-error> -->
       </mat-error>
     </mat-form-field>

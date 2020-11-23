@@ -6,15 +6,31 @@
       <div class="clients__grid">
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <h3 class="clients__grid-title">Кліенти</h3>
 
-          <ng-container *ngIf="clients">
+          <div class="clients__grid-item-top">
+            <h3 class="clients__grid-title">Клієнти</h3>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Фільтр клієнтів</mat-label>
+              <input matInput placeholder="Фільтр клієнтів" #searchClient>
+            </mat-form-field>
+          </div>
+
+
+          <ng-container *ngIf="clientService.clients">
             <mat-card>
-              <h3 class="mat-card-title">Назва</h3>
+              <h3 class="mat-card-title">
+                <button (click)="clientService.sort(clientService.clients, 'clients')">
+                  Назва
+                  <ng-container *ngIf="clientService.clientsSortReverse !== null">
+                    <img src="/assets/icons/{{clientService.clientsSortReverse ? 'arrow-up.svg' : 'arrow-down.svg'}}">
+                  </ng-container>
+                </button>
+              </h3>
               <div class="mat-card-inner">
                 <mat-nav-list>
                   <mat-list-item
-                    *ngFor="let client of clients"
+                    *ngFor="let client of clientService.clients"
                     (click)="selectClient($event, client)"
                     [class.active]="client.active"
                   >
@@ -51,16 +67,23 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="locations">
-<!--            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>-->
+          <ng-container *ngIf="clientService.locations">
+            <!--            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>-->
             <h3 class="clients__grid-title">Міста</h3>
 
             <mat-card>
-              <h3 class="mat-card-title">Назва</h3>
+              <h3 class="mat-card-title">
+                <button (click)="clientService.sort(clientService.locations, 'locations')">
+                  Назва
+                  <ng-container *ngIf="clientService.locationsSortReverse !== null">
+                    <img src="/assets/icons/{{clientService.locationsSortReverse ? 'arrow-up.svg' : 'arrow-down.svg'}}">
+                  </ng-container>
+                </button>
+              </h3>
               <div class="mat-card-inner">
                 <mat-nav-list>
                   <mat-list-item
-                    *ngFor="let location of locations"
+                    *ngFor="let location of clientService.locations"
                     (click)="selectLocation($event, location)"
                     [class.active]="location.active"
                   >
@@ -90,23 +113,33 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="connectionsCWW">
-<!--            <h3 class="clients__grid-title">{{currentClientName}} <img src="/assets/icons/arrow.svg"> Підключення CWW</h3>-->
-            <h3 class="clients__grid-title">Підключення CWW</h3>
+          <ng-container *ngIf="clientService.connectionsCWW">
+
+            <h3 class="clients__grid-title">
+              <span>Підключення CWW</span>
+<!--              <span>кліент {{currentClientName}}</span>-->
+            </h3>
             <mat-card>
               <h3 class="mat-card-title">
                 <div class="mat-card-title__cols">
                   <span>IP</span>
                   <span>Login</span>
                   <span>Password</span>
-                  <span>Status</span>
+                  <button (click)="clientService.sort(clientService.connectionsCWW, 'connections')">
+                    Status
+                    <ng-container *ngIf="clientService.connectionsCWWSortReverse !== null">
+                      <img
+                        src="/assets/icons/{{clientService.connectionsCWWSortReverse ? 'arrow-up.svg' : 'arrow-down.svg'}}">
+                    </ng-container>
+
+                  </button>
                 </div>
               </h3>
               <div class="mat-card-inner">
                 <mat-nav-list>
 
                   <mat-list-item
-                    *ngFor="let connection of connectionsCWW"
+                    *ngFor="let connection of clientService.connectionsCWW"
                     (click)="selectConnection($event, connection)"
                     [class.active]="connection.active"
                   >
@@ -141,16 +174,24 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="departments">
-<!--            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>-->
-            <h3 class="clients__grid-title">Відділи</h3>
+          <ng-container *ngIf="clientService.departments">
+            <!--            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>-->
+            <h3 class="clients__grid-title"><span>Відділи</span><span>місто {{currentLocationName}}</span></h3>
 
             <mat-card>
-              <h3 class="mat-card-title">Назва</h3>
+              <h3 class="mat-card-title">
+                <button (click)="clientService.sort(clientService.departments, 'departments')">
+                  Назва
+                  <ng-container *ngIf="clientService.departmentsSortReverse !== null">
+                    <img
+                      src="/assets/icons/{{clientService.departmentsSortReverse ? 'arrow-up.svg' : 'arrow-down.svg'}}">
+                  </ng-container>
+                </button>
+              </h3>
               <div class="mat-card-inner">
                 <mat-nav-list>
                   <mat-list-item
-                    *ngFor="let department of departments"
+                    *ngFor="let department of clientService.departments"
                   >
                     {{ department.name }}
                     <button mat-icon-button (click)="delete($event, department, 'departments')" title="Видалити">

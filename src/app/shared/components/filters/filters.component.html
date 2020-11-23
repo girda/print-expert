@@ -6,7 +6,7 @@
     <app-select-search
       placeholder="Клієнт *"
       controlName="client"
-      [disabled]="clientsIsReady"
+      [disabled]="!clientsIsReady"
       [formGroup]="formFilters"
       [options]="clients"
       (changeEvent)="onChangeClients($event)"
@@ -17,7 +17,7 @@
     <app-select-search
       placeholder="Місто"
       controlName="location"
-      [disabled]="locationsIsReady"
+      [disabled]="!locationsIsReady"
       [formGroup]="formFilters"
       [options]="locations"
       (changeEvent)="onChangeLocations($event)"
@@ -27,7 +27,7 @@
     <app-select-search
       placeholder="Відділ"
       controlName="department"
-      [disabled]="departmentsIsReady"
+      [disabled]="!departmentsIsReady"
       [formGroup]="formFilters"
       [options]="departments"
     ></app-select-search>

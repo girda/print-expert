@@ -19,11 +19,17 @@
     &-title
       display: flex
       align-items: center
-      //justify-content: center
+      justify-content: space-between
       font-size: 18px
+    &-item-top
+      display: flex
+      align-items: center
+      justify-content: space-between
+
       img
         height: 20px
         margin: 0 10px
+
 
   &__loader
     display: flex
@@ -71,6 +77,12 @@
   font-weight: 500
   margin: 0
   background-color: #d0cfcf
+  button
+    display: flex
+    align-items: center
+    background-color: transparent
+    img
+      height: 15px
   &__cols
     display: flex
     width: calc(100% - 18px)
@@ -101,3 +113,5 @@ mat-list-item.active
   color: white
 mat-list-item.active:hover
   color: black
+
+

@@ -21,7 +21,8 @@ export class AgGridService {
     this.gridOptions = {
       defaultColDef: {
         width: 100,
-        sortable: true
+        sortable: true,
+        lockPosition: true
       },
       rowSelection: 'single',
       tooltipShowDelay: 500,
