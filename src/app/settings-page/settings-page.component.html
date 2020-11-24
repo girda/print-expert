@@ -1,0 +1,45 @@
+<div class="settings">
+  <div class="container">
+    <div class="settings__in">
+      <h2 class="settings__title title">Налаштування</h2>
+
+      <div class="settings__cards">
+        <mat-card class="settings__card card">
+          <h3 class="settings__card-title">Налаштування таймера опитування</h3>
+
+          <div class="card__cols">
+            <div class="card__col">
+              <div class="card__row">
+                <app-select-search
+                  placeholder="Выберіть початок годин"
+                  controlName="hour"
+                  [disabled]="false"
+                  [formGroup]="formTimer"
+                  [options]="hours"
+                ></app-select-search>
+              </div>
+            </div>
+            <div class="card__col">
+              <div class="card__row">
+                <app-select-search
+                  placeholder="Выберіть початок хвилин"
+                  controlName="minutes"
+                  [disabled]="false"
+                  [formGroup]="formTimer"
+                  [options]="minutes"
+                ></app-select-search>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="settings__card">
+          <h3 class="settings__card-title">Налаштування таймера помилок</h3>
+        </mat-card>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>

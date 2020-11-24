@@ -3,6 +3,9 @@ import {fromEvent, Observable, Subscription} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {PopupComponent} from '../shared/components/popup/popup.component';
 import {ClientService} from '../shared/services/client.service';
+import {debounceTime, map} from 'rxjs/operators';
+import {IClient, IConnectionCWW, IDepartment, ILocation} from '../shared/interfaces';
+
 
 @Component({
   selector: 'app-clients-page',
@@ -12,22 +15,44 @@ import {ClientService} from '../shared/services/client.service';
 
 export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  currentClients: IClient[];
   clientsSubscription: Subscription;
   currentClientName: string;
   paramsClient = {name: 'Кліент', title: 'Створити нового кліента', route: 'clients', values: null};
-  @ViewChild('searchClient', { read: ElementRef })  searchClientRef: ElementRef;
+  @ViewChild('searchClient', {read: ElementRef}) searchClientRef: ElementRef;
   searchClient$: Observable<string>;
+  searchClientSub: Subscription;
 
+  currentConnectionsCWW: IConnectionCWW[];
   connectionsCWWSubscription: Subscription;
   currentConnectionIP: string;
-  paramsConnection = {name: 'IP', title: 'Створити нове підключення', login: 'Логін', password: 'Пароль', route: 'connections', values: null};
+  paramsConnection = {
+    name: 'IP',
+    title: 'Створити нове підключення',
+    login: 'Логін',
+    password: 'Пароль',
+    route: 'connections',
+    values: null
+  };
+  @ViewChild('searchConnection', {read: ElementRef}) searchConnectionRef: ElementRef;
+  searchConnection$: Observable<string>;
+  searchConnectionSub: Subscription;
 
+  currentLocations: ILocation[];
   locationsSubscription: Subscription;
   currentLocationName: string;
   paramsLocation = {name: 'Місто', title: 'Створити нове місто', route: 'locations', values: null};
+  @ViewChild('searchLocation', {read: ElementRef}) searchLocationRef: ElementRef;
+  searchLocation$: Observable<string>;
+  searchLocationSub: Subscription;
 
+  currentDepartments: IDepartment[];
   departmentsSubscription: Subscription;
   paramsDepartment = {name: 'Відділ', title: 'Створити новий відділ', route: 'departments', values: null};
+  @ViewChild('searchDepartment', {read: ElementRef}) searchDepartmentRef: ElementRef;
+  searchDepartment$: Observable<string>;
+  searchDepartmentSub: Subscription;
+
 
   dialogSubscription: Subscription;
 
@@ -40,7 +65,19 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.searchClient$ = fromEvent(this.searchClientRef.nativeElement, 'input');
+    this.searchClient$ = fromEvent(this.searchClientRef.nativeElement, 'input').pipe(
+      map((event: any) => event.target.value),
+      debounceTime(500)
+    );
+
+    this.searchClientSub = this.searchClient$.subscribe(value => {
+      this.currentClients = this.clientService.clients.filter(client => {
+        const regexp = new RegExp(value.toUpperCase());
+        return client.name.toUpperCase().match(regexp);
+      });
+    });
+
+
   }
 
   openPopup(params): void {
@@ -91,7 +128,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   delete(event: Event, candidate: any, route: string): void {
     event.stopPropagation();
-    const decision  = window.confirm(`Ви впевнені, що хочете видалити "${candidate.name ? candidate.name : candidate.ip}"?`);
+    const decision = window.confirm(`Ви впевнені, що хочете видалити "${candidate.name ? candidate.name : candidate.ip}"?`);
 
     if (decision) {
       this.clientService.delete(candidate.id, route).subscribe(
@@ -112,6 +149,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clientsSubscription = this.clientService.getClients().subscribe(
       clients => {
         this.clientService.clients = clients;
+        this.currentClients = clients;
         this.paramsClient.values = this.clientService.clients;
       }
     );
@@ -123,7 +161,21 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
         connections => {
           console.log(connections);
           this.clientService.connectionsCWW = connections;
+          this.currentConnectionsCWW = connections;
           this.paramsConnection.values = this.clientService.connectionsCWW;
+
+          setTimeout(() => {
+            this.searchConnection$ = fromEvent(this.searchConnectionRef.nativeElement, 'input').pipe(
+              map((event: any) => event.target.value),
+              debounceTime(500)
+            );
+            this.searchConnectionSub = this.searchConnection$.subscribe(value => {
+              this.currentConnectionsCWW = this.clientService.connectionsCWW.filter(location => {
+                const regexp = new RegExp(value.toUpperCase());
+                return location.ip.toUpperCase().match(regexp) || location.login.toUpperCase().match(regexp) || location.pswd.toUpperCase().match(regexp);
+              });
+            });
+          }, 0);
         },
         error => {
           console.log(error);
@@ -134,10 +186,25 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private getLocation(id: number): void {
     this.locationsSubscription = this.clientService.getLocations(id)
       .subscribe(
-        connections => {
-          console.log(connections);
-          this.clientService.locations = connections;
+        locations => {
+          console.log(locations);
+          this.clientService.locations = locations;
+          this.currentLocations = locations;
           this.paramsLocation.values = this.clientService.locations;
+
+          setTimeout(() => {
+            this.searchLocation$ = fromEvent(this.searchLocationRef.nativeElement, 'input').pipe(
+              map((event: any) => event.target.value),
+              debounceTime(500)
+            );
+            this.searchLocationSub = this.searchLocation$.subscribe(value => {
+              this.currentLocations = this.clientService.locations.filter(location => {
+                const regexp = new RegExp(value.toUpperCase());
+                return location.name.toUpperCase().match(regexp);
+              });
+            });
+          }, 0);
+
         },
         error => {
           console.log(error);
@@ -151,7 +218,21 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
         departments => {
           console.log(departments);
           this.clientService.departments = departments;
+          this.currentDepartments = departments;
           this.paramsDepartment.values = this.clientService.departments;
+
+          setTimeout(() => {
+            this.searchDepartment$ = fromEvent(this.searchDepartmentRef.nativeElement, 'input').pipe(
+              map((event: any) => event.target.value),
+              debounceTime(500)
+            );
+            this.searchDepartmentSub = this.searchDepartment$.subscribe(value => {
+              this.currentDepartments = this.clientService.departments.filter(location => {
+                const regexp = new RegExp(value.toUpperCase());
+                return location.name.toUpperCase().match(regexp);
+              });
+            });
+          }, 0);
         },
         error => {
           console.log(error);

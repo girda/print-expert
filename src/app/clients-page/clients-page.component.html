@@ -16,11 +16,10 @@
             </mat-form-field>
           </div>
 
-
-          <ng-container *ngIf="clientService.clients">
+          <ng-container *ngIf="currentClients">
             <mat-card>
               <h3 class="mat-card-title">
-                <button (click)="clientService.sort(clientService.clients, 'clients')">
+                <button (click)="clientService.sort(currentClients, 'clients')">
                   Назва
                   <ng-container *ngIf="clientService.clientsSortReverse !== null">
                     <img src="/assets/icons/{{clientService.clientsSortReverse ? 'arrow-up.svg' : 'arrow-down.svg'}}">
@@ -30,7 +29,7 @@
               <div class="mat-card-inner">
                 <mat-nav-list>
                   <mat-list-item
-                    *ngFor="let client of clientService.clients"
+                    *ngFor="let client of currentClients"
                     (click)="selectClient($event, client)"
                     [class.active]="client.active"
                   >
@@ -67,13 +66,20 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="clientService.locations">
+          <ng-container *ngIf="currentLocations">
             <!--            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>-->
-            <h3 class="clients__grid-title">Міста</h3>
+            <div class="clients__grid-item-top">
+              <h3 class="clients__grid-title">Міста</h3>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Фільтр міст</mat-label>
+                <input matInput placeholder="Фільтр міст" #searchLocation>
+              </mat-form-field>
+            </div>
 
             <mat-card>
               <h3 class="mat-card-title">
-                <button (click)="clientService.sort(clientService.locations, 'locations')">
+                <button (click)="clientService.sort(currentLocations, 'locations')">
                   Назва
                   <ng-container *ngIf="clientService.locationsSortReverse !== null">
                     <img src="/assets/icons/{{clientService.locationsSortReverse ? 'arrow-up.svg' : 'arrow-down.svg'}}">
@@ -83,7 +89,7 @@
               <div class="mat-card-inner">
                 <mat-nav-list>
                   <mat-list-item
-                    *ngFor="let location of clientService.locations"
+                    *ngFor="let location of currentLocations"
                     (click)="selectLocation($event, location)"
                     [class.active]="location.active"
                   >
@@ -113,19 +119,24 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="clientService.connectionsCWW">
+          <ng-container *ngIf="currentConnectionsCWW">
 
-            <h3 class="clients__grid-title">
-              <span>Підключення CWW</span>
-<!--              <span>кліент {{currentClientName}}</span>-->
-            </h3>
+            <div class="clients__grid-item-top">
+              <h3 class="clients__grid-title">Підключення CWW</h3>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Фільтр підключеннь</mat-label>
+                <input matInput placeholder="Фільтр підключеннь" #searchConnection>
+              </mat-form-field>
+            </div>
+
             <mat-card>
               <h3 class="mat-card-title">
                 <div class="mat-card-title__cols">
                   <span>IP</span>
                   <span>Login</span>
                   <span>Password</span>
-                  <button (click)="clientService.sort(clientService.connectionsCWW, 'connections')">
+                  <button (click)="clientService.sort(currentConnectionsCWW, 'connections')">
                     Status
                     <ng-container *ngIf="clientService.connectionsCWWSortReverse !== null">
                       <img
@@ -139,7 +150,7 @@
                 <mat-nav-list>
 
                   <mat-list-item
-                    *ngFor="let connection of clientService.connectionsCWW"
+                    *ngFor="let connection of currentConnectionsCWW"
                     (click)="selectConnection($event, connection)"
                     [class.active]="connection.active"
                   >
@@ -174,13 +185,20 @@
 
         <!-- START  clients__grid-item -->
         <div class="clients__grid-item">
-          <ng-container *ngIf="clientService.departments">
+          <ng-container *ngIf="currentDepartments">
             <!--            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>-->
-            <h3 class="clients__grid-title"><span>Відділи</span><span>місто {{currentLocationName}}</span></h3>
+            <div class="clients__grid-item-top">
+              <h3 class="clients__grid-title">Відділи</h3>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Фільтр відділів</mat-label>
+                <input matInput placeholder="Фільтр відділів" #searchDepartment>
+              </mat-form-field>
+            </div>
 
             <mat-card>
               <h3 class="mat-card-title">
-                <button (click)="clientService.sort(clientService.departments, 'departments')">
+                <button (click)="clientService.sort(currentDepartments, 'departments')">
                   Назва
                   <ng-container *ngIf="clientService.departmentsSortReverse !== null">
                     <img
@@ -191,7 +209,7 @@
               <div class="mat-card-inner">
                 <mat-nav-list>
                   <mat-list-item
-                    *ngFor="let department of clientService.departments"
+                    *ngFor="let department of currentDepartments"
                   >
                     {{ department.name }}
                     <button mat-icon-button (click)="delete($event, department, 'departments')" title="Видалити">

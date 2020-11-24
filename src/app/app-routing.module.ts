@@ -13,6 +13,7 @@ import {KeysService} from './shared/services/keys.service';
 import {CreateUsersPageComponent} from './create-users-page/create-users-page.component';
 import {ClientPrintersPageComponent} from './client-printers-page/client-printers-page.component';
 import {UserPrintersPageComponent} from './user-printers-page/user-printers-page.component';
+import {SettingsPageComponent} from './settings-page/settings-page.component';
 
 const keys = new KeysService();
 
@@ -43,6 +44,12 @@ const routes: Routes = [{
       {
         path: 'create-users',
         component: CreateUsersPageComponent,
+        canActivate: [GuardServices],
+        data: {role: keys.roles.admin.id}
+      },
+      {
+        path: 'settings',
+        component: SettingsPageComponent,
         canActivate: [GuardServices],
         data: {role: keys.roles.admin.id}
       },

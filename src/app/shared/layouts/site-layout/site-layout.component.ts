@@ -14,7 +14,8 @@ export class SiteLayoutComponent implements OnInit {
   links: any[] = [
     {name: 'Принтери', url: 'printers'},
     {name: 'Кліенти', url: 'clients'},
-    {name: 'Користувачі', url: 'create-users'}
+    {name: 'Користувачі', url: 'create-users'},
+    {name: 'Налаштування', url: 'settings'}
   ];
 
   isAdmin = false;

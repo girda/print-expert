@@ -24,6 +24,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   currentClientId: number;
   clientsSubscription: Subscription;
   clientsIsReady = false;
+  filtersSub: Subscription;
 
   locations: IDropdown[];
   locationsSubscription: Subscription;
@@ -140,8 +141,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
         });
     }
 
-    this.userService.setFilters(this.formFilters.value, this.userService.id)
-      .subscribe(res => console.log(res));
+    this.filtersSub = this.userService.setFilters(this.formFilters.value, this.userService.id)
+      .subscribe(res => {
+        console.log(res);
+        console.log(this.filtersSub);
+      });
   }
 
   updateFilters(): void {
@@ -222,6 +226,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
     }
     if (this.filtersSubscription) {
       this.filtersSubscription.unsubscribe();
+    }
+    if (this.filtersSub) {
+      this.filtersSub.unsubscribe();
     }
   }
 

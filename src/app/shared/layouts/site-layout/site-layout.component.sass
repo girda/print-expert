@@ -7,8 +7,11 @@
       text-decoration: none
       color: white
       margin-right: 40px
+      transition: color .3s ease
     &.is-active a
       text-decoration: underline
+    &:hover:not(.is-active) a
+      color: #fec502
 
     &:last-child
       margin-left: auto
