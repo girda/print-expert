@@ -7,6 +7,44 @@
   &__card
     width: 48%
 
-  &__card-title
+.card
+
+  &__title
     text-align: center
     font-weight: 500
+    margin-bottom: 20px
+
+  &__subtitle
+    text-align: center
+    font-weight: 500
+    margin-bottom: 20px
+
+  &__status
+    text-align: center
+    &.is-success
+      color: #3b9d25
+    &.is-error
+      color: #f44336
+
+
+  &__cols
+    display: flex
+    justify-content: space-between
+
+  &__col
+    width: 48%
+
+  &__row
+    margin-bottom: 20px
+
+  &__btns
+    display: flex
+    justify-content: space-around
+    margin-top: 30px
+    button:first-child
+      margin-right: 20px
+
+  &__btn-start
+    background-color: #3b9d25
+  &__btn-stop
+    background-color: #f44336

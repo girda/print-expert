@@ -3,9 +3,9 @@
     <div class="settings__in">
       <h2 class="settings__title title">Налаштування</h2>
 
-      <div class="settings__cards">
+      <div class="settings__cards" *ngIf="timerSettings">
         <mat-card class="settings__card card">
-          <h3 class="settings__card-title">Налаштування таймера опитування</h3>
+          <h3 class="card__title">Налаштування таймера опитування</h3>
 
           <div class="card__cols">
             <div class="card__col">
@@ -18,8 +18,7 @@
                   [options]="hours"
                 ></app-select-search>
               </div>
-            </div>
-            <div class="card__col">
+
               <div class="card__row">
                 <app-select-search
                   placeholder="Выберіть початок хвилин"
@@ -30,11 +29,46 @@
                 ></app-select-search>
               </div>
             </div>
+            <div class="card__col">
+              <h4 class="card__subtitle">статус запуску</h4>
+
+              <p class="card__status is-success" *ngIf="timerSettings.exec_status; else success">запущено</p>
+
+              <ng-template #success>
+                <p class="card__status is-error">зупинено</p>
+              </ng-template>
+
+
+
+              <div class="card__btns">
+                <button
+                  class="card__btn-stop"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="timerSettings.exec_status === 0"
+                  (click)="stopTimer()"
+                >
+                  Стоп
+                </button>
+
+                <button
+                  class="card__btn-start"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="timerSettings.exec_status === 1"
+                  (click)="startTimer()"
+                >
+                  Запуск
+                </button>
+              </div>
+            </div>
           </div>
         </mat-card>
 
-        <mat-card class="settings__card">
-          <h3 class="settings__card-title">Налаштування таймера помилок</h3>
+        <mat-card class="settings__card card">
+          <h3 class="card__title">Налаштування таймера помилок</h3>
         </mat-card>
 
 

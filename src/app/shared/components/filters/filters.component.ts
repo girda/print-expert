@@ -165,7 +165,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
         end: this.userService.filters.range.end
       }
     });
-
+    console.log(this.formFilters.value);
     if (this.userService.filters.location) {
       this.departmentsIsReady = true;
     }

@@ -55,6 +55,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         } else if (this.userService.getRole() === this.keys.roles.user.id) {
           this.router.navigate(['/user-printers']);
         }
+        this.form.enable();
       },
       error => {
         alert(error.error.message);

@@ -99,6 +99,9 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
     client.active = true;
     this.clientService.currentClientId = client.id;
     this.currentClientName = client.name;
+    this.currentConnectionsCWW = null;
+    this.currentLocations = null;
+    this.currentDepartments = null;
     this.getConnectionsCWW(client.id);
   }
 
@@ -111,6 +114,8 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
     connection.active = true;
     this.currentConnectionIP = connection.ip;
     this.clientService.currentConnectionId = connection.id;
+    this.currentLocations = null;
+    this.currentDepartments = null;
     this.getLocation(connection.id);
   }
 
@@ -123,6 +128,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
     location.active = true;
     this.currentLocationName = location.name;
     this.clientService.currentLocationId = location.id;
+    this.currentDepartments = null;
     this.getDepartments({location_id: this.clientService.currentLocationId});
   }
 
