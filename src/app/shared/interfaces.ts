@@ -63,5 +63,6 @@ export interface ITimer {
   error_status?: number;
   error_descr?: string;
   exec_status?: number;
+  period: number;
 }
 

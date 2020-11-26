@@ -13,7 +13,7 @@
                 <app-select-search
                   placeholder="Выберіть початок годин"
                   controlName="hour"
-                  [disabled]="false"
+                  [disabled]="timerSettings.exec_status === 1"
                   [formGroup]="formTimer"
                   [options]="hours"
                 ></app-select-search>
@@ -23,7 +23,7 @@
                 <app-select-search
                   placeholder="Выберіть початок хвилин"
                   controlName="minutes"
-                  [disabled]="false"
+                  [disabled]="timerSettings.exec_status === 1"
                   [formGroup]="formTimer"
                   [options]="minutes"
                 ></app-select-search>
@@ -47,7 +47,7 @@
                   mat-raised-button
                   color="primary"
                   [disabled]="timerSettings.exec_status === 0"
-                  (click)="stopTimer()"
+                  (click)="stopTimer(timerSettings.id)"
                 >
                   Стоп
                 </button>
@@ -58,7 +58,7 @@
                   mat-raised-button
                   color="primary"
                   [disabled]="timerSettings.exec_status === 1"
-                  (click)="startTimer()"
+                  (click)="startTimer(timerSettings.id, formTimer.value)"
                 >
                   Запуск
                 </button>
@@ -69,6 +69,76 @@
 
         <mat-card class="settings__card card">
           <h3 class="card__title">Налаштування таймера помилок</h3>
+
+          <div class="card__cols">
+            <div class="card__col">
+              <div class="card__row">
+                <app-select-search
+                  placeholder="Выберіть початок годин"
+                  controlName="hour"
+                  [disabled]="timerErrorsSettings.exec_status === 1"
+                  [formGroup]="formTimerErrors"
+                  [options]="hours"
+                ></app-select-search>
+              </div>
+
+              <div class="card__row">
+                <app-select-search
+                  placeholder="Выберіть початок хвилин"
+                  controlName="minutes"
+                  [disabled]="timerErrorsSettings.exec_status === 1"
+                  [formGroup]="formTimerErrors"
+                  [options]="minutes"
+                ></app-select-search>
+              </div>
+
+              <div class="card__row">
+                <app-select-search
+                  placeholder="Выберіть інтервал"
+                  controlName="period"
+                  [disabled]="timerErrorsSettings.exec_status === 1"
+                  [formGroup]="formTimerErrors"
+                  [options]="period"
+                ></app-select-search>
+              </div>
+
+            </div>
+            <div class="card__col">
+              <h4 class="card__subtitle">статус запуску</h4>
+
+              <p class="card__status is-success" *ngIf="timerErrorsSettings.exec_status; else success">запущено</p>
+
+              <ng-template #success>
+                <p class="card__status is-error">зупинено</p>
+              </ng-template>
+
+
+
+              <div class="card__btns">
+                <button
+                  class="card__btn-stop"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="timerErrorsSettings.exec_status === 0"
+                  (click)="stopTimer(timerErrorsSettings.id)"
+                >
+                  Стоп
+                </button>
+
+                <button
+                  class="card__btn-start"
+                  type="button"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="timerErrorsSettings.exec_status === 1"
+                  (click)="startTimer(timerErrorsSettings.id, formTimerErrors.value)"
+                >
+                  Запуск
+                </button>
+              </div>
+            </div>
+          </div>
         </mat-card>
 
 

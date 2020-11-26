@@ -16,8 +16,12 @@ export class TimerService {
     return this.http.get<ITimer[]>(`${environment.apiUrl}/api/timer`);
   }
 
-  startTimer(id: number): Observable<any> {
-    return this.http.get<ITimer[]>(`${environment.apiUrl}/api/timer/start/${id}`);
+  startTimer(id: number, body): Observable<any> {
+    return this.http.post<ITimer[]>(`${environment.apiUrl}/api/timer/start/${id}`, body);
+  }
+
+  stopTimer(id: number): Observable<any> {
+    return this.http.get<ITimer[]>(`${environment.apiUrl}/api/timer/stop/${id}`);
   }
 
 }

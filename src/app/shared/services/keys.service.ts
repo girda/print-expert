@@ -24,7 +24,7 @@ export class KeysService {
       id: 1,
       name: 'Таймер'
     },
-    secondary: {
+    errors: {
       id: 2,
       name: 'Таймер ошибок'
     }
