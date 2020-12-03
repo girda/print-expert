@@ -10,6 +10,7 @@
       [formGroup]="formFilters"
       [options]="clients"
       (changeEvent)="onChangeClients($event)"
+      [clearFilter]="false"
     ></app-select-search>
   </div>
 
@@ -20,6 +21,7 @@
       [disabled]="!locationsIsReady"
       [formGroup]="formFilters"
       [options]="locations"
+      [clearFilter]="true"
       (changeEvent)="onChangeLocations($event)"
     ></app-select-search>
   </div>
@@ -30,6 +32,7 @@
       [disabled]="!departmentsIsReady"
       [formGroup]="formFilters"
       [options]="departments"
+      [clearFilter]="true"
     ></app-select-search>
   </div>
 

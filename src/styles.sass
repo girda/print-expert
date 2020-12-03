@@ -72,6 +72,7 @@ body .title
     margin-right: 20px
     &:last-child
       margin-right: 0
+      margin-left: 20px
     &:first-child
       margin-right: 20px
       margin-left: auto
@@ -79,6 +80,10 @@ body .title
 
 ag-grid-angular
   margin-bottom: 30px
+
+  .ag-ltr, .ag-rtl
+    .ag-has-focus .ag-cell-focus:not(.ag-cell-range-selected)
+      border-color: #2196f3!important
 
 //.mat-form-field-outline
 //  background-color: white!important

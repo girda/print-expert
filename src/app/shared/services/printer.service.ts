@@ -29,7 +29,7 @@ export class PrinterService {
   }
 
   getLocations(id: number): Observable<IDropdown[]> {
-    return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/locations/${JSON.stringify({client_id: id})}`);
+    return this.http.get<IDropdown[]>(`${environment.apiUrl}/api/locations/${JSON.stringify({client_id: id, distinct: true})}`);
   }
 
   getDepartments(where: any): Observable<IDropdown[]> {
@@ -67,7 +67,7 @@ export class PrinterService {
             field: 'location',
             headerTooltip: 'Місто',
             editable: true,
-            cellStyle: { backgroundColor: '#f3f3c3' },
+            cellStyle: { backgroundColor: '#f3f3c3', borderRight: '1px solid #dde2eb', borderLeft: '1px solid #dde2eb'},
             cellEditor: 'agRichSelectCellEditor',
             cellEditorParams: (params) => {
               const currentLocation: string[] = [];
@@ -86,7 +86,7 @@ export class PrinterService {
             headerName: 'Відділ',
             field: 'department',
             headerTooltip: 'Відділ',
-            cellStyle: { backgroundColor: '#f3f3c3' },
+            cellStyle: { backgroundColor: '#f3f3c3', borderRight: '1px solid #dde2eb'},
             editable: (params) => {
               return params.data.location;
             },
@@ -172,7 +172,7 @@ export class PrinterService {
             field: 'cartridge_resource_bk',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3', borderRight: '1px solid #dde2eb', borderLeft: '1px solid #dde2eb'}
           },
           {
             headerName: 'CN',
@@ -180,7 +180,7 @@ export class PrinterService {
             field: 'cartridge_resource_cn',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3', borderRight: '1px solid #dde2eb'}
           },
           {
             headerName: 'MG',
@@ -188,7 +188,7 @@ export class PrinterService {
             field: 'cartridge_resource_mg',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3', borderRight: '1px solid #dde2eb'}
           },
           {
             headerName: 'YL',
@@ -196,7 +196,7 @@ export class PrinterService {
             field: 'cartridge_resource_yl',
             width: 70,
             editable: true,
-            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3'}
+            cellStyle: {textAlign: 'center', backgroundColor: '#f3f3c3', borderRight: '1px solid #dde2eb'}
           }
         ]
       },

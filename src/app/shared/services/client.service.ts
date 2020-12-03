@@ -58,11 +58,11 @@ export class ClientService {
     return this.http.get<IConnectionCWW[]>(`${environment.apiUrl}/api/connections/${id}`);
   }
 
-  getLocations(id: number): Observable<ILocation[]> {
+  getLocations(where: object): Observable<ILocation[]> {
     this.locations = null;
     this.departments = null;
     this.departmentsSortReverse = null;
-    return this.http.get<ILocation[]>(`${environment.apiUrl}/api/locations/${JSON.stringify({cwwc_id: id})}`);
+    return this.http.get<ILocation[]>(`${environment.apiUrl}/api/locations/${JSON.stringify(where)}`);
   }
 
   getDepartments(where: any): Observable<IDropdown[]> {

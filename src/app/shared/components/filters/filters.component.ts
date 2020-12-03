@@ -174,9 +174,10 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   getLocationsAndDepartmentsForTable(id): void {
-    this.locationsWithIdSubscription = this.clientService.getLocations(id)
+    this.locationsWithIdSubscription = this.clientService.getLocations({client_id: id, distinct: false})
       .subscribe(
         locations => {
+          console.log(locations);
           this.printerService.locations = locations;
 
           this.departmentsSubscription = this.printerService.getDepartments({client_id: id})

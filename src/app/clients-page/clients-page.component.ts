@@ -190,7 +190,7 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private getLocation(id: number): void {
-    this.locationsSubscription = this.clientService.getLocations(id)
+    this.locationsSubscription = this.clientService.getLocations({cwwc_id: id, distinct: false})
       .subscribe(
         locations => {
           console.log(locations);

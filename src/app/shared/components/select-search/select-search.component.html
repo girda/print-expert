@@ -8,15 +8,22 @@
       disabled="{{disabled}}"
       [(value)]="selected"
     >
+
       <mat-option>
         <ngx-mat-select-search
           placeholderLabel="Пошук"
           [formControl]="search"
         ></ngx-mat-select-search>
       </mat-option>
+
+        <ng-container *ngIf="clearFilter">
+          <mat-option><span class="clear"><b>очистити фільтр</b><img src="/assets/icons/close.svg"></span></mat-option>
+        </ng-container>
+
         <mat-option *ngFor="let option of options" [value]="option.id ? option.id : option.name">
           {{option.name}}
         </mat-option>
+
 
     </mat-select>
   </mat-form-field>

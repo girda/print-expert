@@ -22,7 +22,13 @@ export class AgGridService {
       defaultColDef: {
         width: 100,
         sortable: true,
-        lockPosition: true
+        lockPosition: true,
+        resizable: true,
+        cellRenderer: (params) => {
+          if (params.value !== null) {
+            return `<span title="${params.value}">${params.value}</span>`;
+          }
+        }
       },
       rowSelection: 'single',
       tooltipShowDelay: 500,

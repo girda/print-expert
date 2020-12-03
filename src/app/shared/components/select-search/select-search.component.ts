@@ -14,6 +14,7 @@ export class SelectSearchComponent implements OnInit {
   @Input() controlName: string;
   @Input() disabled: boolean;
   @Input() selected: any;
+  @Input() clearFilter: boolean;
   @Output() changeEvent = new EventEmitter();
 
   search: FormControl = new FormControl();
