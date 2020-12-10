@@ -176,9 +176,9 @@ export class ClientsPageComponent implements OnInit, OnDestroy, AfterViewInit {
               debounceTime(500)
             );
             this.searchConnectionSub = this.searchConnection$.subscribe(value => {
-              this.currentConnectionsCWW = this.clientService.connectionsCWW.filter(location => {
+              this.currentConnectionsCWW = this.clientService.connectionsCWW.filter(connection => {
                 const regexp = new RegExp(value.toUpperCase());
-                return location.ip.toUpperCase().match(regexp) || location.login.toUpperCase().match(regexp) || location.pswd.toUpperCase().match(regexp);
+                return connection.ip.toUpperCase().match(regexp) || connection.login.toUpperCase().match(regexp) || connection.pswd.toUpperCase().match(regexp);
               });
             });
           }, 0);
