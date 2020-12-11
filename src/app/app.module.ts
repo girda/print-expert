@@ -38,6 +38,7 @@ import {PopupCreateUserComponent} from './shared/components/popup-create-user/po
 import { ClientPrintersPageComponent } from './client-printers-page/client-printers-page.component';
 import { UserPrintersPageComponent } from './user-printers-page/user-printers-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
+import { InputFilterComponent } from './shared/components/input-filter/input-filter.component';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     PopupCreateUserComponent,
     ClientPrintersPageComponent,
     UserPrintersPageComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    InputFilterComponent
   ],
   imports: [
     BrowserModule,
