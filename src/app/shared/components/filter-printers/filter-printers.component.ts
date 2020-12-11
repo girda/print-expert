@@ -12,10 +12,10 @@ import {KeysService} from '../../services/keys.service';
 
 @Component({
   selector: 'app-filters',
-  templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.sass']
+  templateUrl: './filter-printers.component.html',
+  styleUrls: ['./filter-printers.component.sass']
 })
-export class FiltersComponent implements OnInit, OnDestroy {
+export class FilterPrintersComponent implements OnInit, OnDestroy {
 
   formFilters: FormGroup;
   range: FormGroup;

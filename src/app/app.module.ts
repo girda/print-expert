@@ -32,7 +32,7 @@ import {AgGridModule} from 'ag-grid-angular';
 import {ClientsPageComponent} from './clients-page/clients-page.component';
 import {PopupComponent} from './shared/components/popup/popup.component';
 import {TokenInterceptor} from './shared/services/token-interceptor.service';
-import {FiltersComponent} from './shared/components/filters/filters.component';
+import {FilterPrintersComponent} from './shared/components/filter-printers/filter-printers.component';
 import {CreateUsersPageComponent} from './create-users-page/create-users-page.component';
 import {PopupCreateUserComponent} from './shared/components/popup-create-user/popup-create-user.component';
 import { ClientPrintersPageComponent } from './client-printers-page/client-printers-page.component';
@@ -50,7 +50,7 @@ import { SettingsPageComponent } from './settings-page/settings-page.component';
     SelectSearchComponent,
     ClientsPageComponent,
     PopupComponent,
-    FiltersComponent,
+    FilterPrintersComponent,
     CreateUsersPageComponent,
     PopupCreateUserComponent,
     ClientPrintersPageComponent,
