@@ -10,10 +10,14 @@
           <div class="clients__grid-item-top">
             <h3 class="clients__grid-title">Клієнти</h3>
 
-            <mat-form-field appearance="outline">
-              <mat-label>Фільтр клієнтів</mat-label>
-              <input matInput placeholder="Фільтр клієнтів" #searchClient>
-            </mat-form-field>
+<!--            <mat-form-field appearance="outline">-->
+<!--              <mat-label>Фільтр клієнтів</mat-label>-->
+<!--              <input matInput placeholder="Фільтр клієнтів" #searchClient>-->
+<!--            </mat-form-field>-->
+            <app-input-filter
+              placeholder="Фільтр клієнтів"
+              (inputEvent)="onInputClient($event)"
+            ></app-input-filter>
           </div>
 
           <ng-container *ngIf="currentClients">
@@ -70,11 +74,11 @@
             <!--            <h3 class="clients__grid-title">{{currentConnectionIP}} <img src="/assets/icons/arrow.svg"> Міста</h3>-->
             <div class="clients__grid-item-top">
               <h3 class="clients__grid-title">Міста</h3>
+              <app-input-filter
+                placeholder="Фільтр міст"
+                (inputEvent)="onInputLocation($event)"
+              ></app-input-filter>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Фільтр міст</mat-label>
-                <input matInput placeholder="Фільтр міст" #searchLocation>
-              </mat-form-field>
             </div>
 
             <mat-card>
@@ -124,10 +128,10 @@
             <div class="clients__grid-item-top">
               <h3 class="clients__grid-title">Підключення CWW</h3>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Фільтр підключеннь</mat-label>
-                <input matInput placeholder="Фільтр підключеннь" #searchConnection>
-              </mat-form-field>
+              <app-input-filter
+                placeholder="Фільтр підключеннь"
+                (inputEvent)="onInputConnection($event)"
+              ></app-input-filter>
             </div>
 
             <mat-card>
@@ -189,11 +193,10 @@
             <!--            <h3 class="clients__grid-title">{{currentLocationName}} <img src="/assets/icons/arrow.svg"> Відділи</h3>-->
             <div class="clients__grid-item-top">
               <h3 class="clients__grid-title">Відділи</h3>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Фільтр відділів</mat-label>
-                <input matInput placeholder="Фільтр відділів" #searchDepartment>
-              </mat-form-field>
+              <app-input-filter
+                placeholder="Фільтр відділів"
+                (inputEvent)="onInputDepartment($event)"
+              ></app-input-filter>
             </div>
 
             <mat-card>

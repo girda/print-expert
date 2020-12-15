@@ -81,7 +81,7 @@ import { InputFilterComponent } from './shared/components/input-filter/input-fil
     MatSelectModule,
     MatListModule,
     MatTableModule,
-    AgGridModule.withComponents([])
+    AgGridModule.withComponents([]),
   ],
   providers: [
     {

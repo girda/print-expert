@@ -1,4 +1,9 @@
 <mat-form-field appearance="outline">
-  <mat-label>Фільтр міст</mat-label>
-  <input matInput placeholder="Фільтр міст" #input>
+  <mat-label>{{placeholder}}</mat-label>
+  <input
+    matInput
+    placeholder="{{placeholder}}"
+    #input
+    (input)="onInput($event)"
+  >
 </mat-form-field>
