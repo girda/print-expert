@@ -28,11 +28,12 @@
                 <span>{{ user.client }}</span>
                 <span>{{ user.email }}</span>
                 <span>{{ user.name }}</span>
-<!--                <span><img src="/assets/icons/{{ connection.status ? 'success' : 'error' }}.svg"></span>-->
+
+                <button mat-icon-button (click)="openEditPopup(user)" title="Редагувати">
+                  <img src="/assets/icons/pen.svg" alt="Редагувати">
+                </button>
               </div>
-<!--              <button mat-icon-button (click)="delete($event, connection, 'connections')" title="Видалити">-->
-<!--                <img src="/assets/icons/close.svg">-->
-<!--              </button>-->
+
             </mat-list-item>
           </mat-list>
         </div>

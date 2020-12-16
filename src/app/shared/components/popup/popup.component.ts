@@ -2,8 +2,6 @@ import {Component, OnInit, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {ClientService} from '../../services/client.service';
-import {log} from 'util';
-
 
 @Component({
   selector: 'app-popup',

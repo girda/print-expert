@@ -13,7 +13,8 @@ export class CreateUsersPageComponent implements OnInit, OnDestroy {
 
   users;
   usersSubscription: Subscription;
-  dialogSubscription: Subscription
+  dialogSubscription: Subscription;
+  dialogEditSubscription: Subscription;
 
   constructor(private userService: UserService,
               public matDialog: MatDialog) {
@@ -23,8 +24,20 @@ export class CreateUsersPageComponent implements OnInit, OnDestroy {
     this.getUsers();
   }
 
+  openEditPopup(user): void {
+    console.log(user);
+    console.log(user.role);
+    const dialogRef = this.matDialog.open(PopupCreateUserComponent, {data: user});
+
+    this.dialogEditSubscription = dialogRef.afterClosed().subscribe(
+      () => {
+        this.getUsers();
+      }
+    );
+  }
+
   openPopup(): void {
-    const dialogRef = this.matDialog.open(PopupCreateUserComponent);
+    const dialogRef = this.matDialog.open(PopupCreateUserComponent, {data: null});
 
     this.dialogSubscription = dialogRef.afterClosed().subscribe(
       () => {

@@ -28,21 +28,28 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
               private clientsService: ClientService) { }
 
   ngOnInit(): void {
+
     this.form = new FormGroup({
-      login: new FormControl(null, [Validators.required]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-      email: new FormControl(null, [Validators.email]),
-      name: new FormControl(null),
-      role: new FormControl(null, [Validators.required]),
+      login: new FormControl(this.data ? this.data.login : null, [Validators.required]),
+      password: new FormControl(this.data ? this.data.password : null, [Validators.required, Validators.minLength(6)]),
+      email: new FormControl(this.data ? this.data.email : null, [Validators.email]),
+      name: new FormControl(this.data ? this.data.name : null),
+      role: new FormControl(this.data ? this.getRoleId(this.data.role) : null, [Validators.required]),
       client: new FormControl(null)
     });
 
     this.roles = [this.keys.roles.admin, this.keys.roles.user, this.keys.roles.client];
-    console.log(this.roles);
     this.clientsSubscription = this.clientsService.getClients()
       .subscribe(
         clients => {
           this.clients = clients;
+          if (this.data && this.data.client) {
+            this.form.patchValue({
+              client: this.getClientId(this.data.client)
+            });
+            this.flagHiddenClient = false;
+            this.form.get('client').setValidators([Validators.required]);
+          }
         },
         error => {
           console.log(error);
@@ -55,7 +62,6 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
   }
 
   onChangeRole(event): void {
-    console.log(event.value);
     if (event.value === this.keys.roles.client.id) {
       this.flagHiddenClient = false;
       this.form.get('client').setValidators([Validators.required]);
@@ -89,4 +95,21 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
     }
   }
 
+  getRoleId(role: string): number {
+    for (const key in this.keys.roles) {
+      if (this.keys.roles[key].name.trim() === role.trim()) {
+        return this.keys.roles[key].id;
+      }
+    }
+  }
+
+  getClientId(client: string): number {
+    for (let i = 0; i < this.clients.length; i++) {
+      if (this.clients[i].name.trim() === (client ? client.trim() : client)) {
+        console.log(this.clients[i]);
+        console.log(this.clients);
+        return this.clients[i].id;
+      }
+    }
+  }
 }
