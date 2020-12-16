@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../shared/services/auth.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {AuthService} from '../shared/services/auth.service';
 import {UserService} from '../shared/services/user.service';
 import {KeysService} from '../shared/services/keys.service';
+import { sha256 } from 'js-sha256';
 
 @Component({
   selector: 'app-login-page',
@@ -20,7 +21,8 @@ export class LoginPageComponent implements OnInit, OnDestroy {
               private auth: AuthService,
               private router: Router,
               private userService: UserService,
-              private keys: KeysService) { }
+              private keys: KeysService) {
+  }
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -45,8 +47,10 @@ export class LoginPageComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.form.disable();
+    const formData = this.form.value;
+    formData.password = sha256(formData.password);
 
-    this.aSub = this.auth.login(this.form.value).subscribe(
+    this.aSub = this.auth.login(formData).subscribe(
       () => {
         if (this.userService.getRole() === this.keys.roles.admin.id) {
           this.router.navigate(['/printers']);

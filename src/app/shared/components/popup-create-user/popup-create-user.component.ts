@@ -5,6 +5,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UserService} from '../../services/user.service';
 import {ClientService} from '../../services/client.service';
 import {Subscription} from 'rxjs';
+import { sha256 } from 'js-sha256';
 
 @Component({
   selector: 'app-popup-create-user',
@@ -37,6 +38,7 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
     });
 
     this.roles = [this.keys.roles.admin, this.keys.roles.user, this.keys.roles.client];
+    console.log(this.roles);
     this.clientsSubscription = this.clientsService.getClients()
       .subscribe(
         clients => {
@@ -53,6 +55,7 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
   }
 
   onChangeRole(event): void {
+    console.log(event.value);
     if (event.value === this.keys.roles.client.id) {
       this.flagHiddenClient = false;
       this.form.get('client').setValidators([Validators.required]);
@@ -64,7 +67,11 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.userService.create(this.form.value)
+    this.form.disable();
+    const formData = this.form.value;
+    formData.password = sha256(formData.password);
+
+    this.userService.create(formData)
       .subscribe(
         res => {
           this.dialogRef.close();

@@ -1,26 +1,29 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild} from '@angular/core';
 import {fromEvent, Observable, Subscription} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
+import {T} from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-input-filter',
   templateUrl: './input-filter.component.html',
   styleUrls: ['./input-filter.component.sass']
 })
-export class InputFilterComponent implements OnInit, OnDestroy, AfterViewInit {
+export class InputFilterComponent implements  OnDestroy, AfterViewInit {
 
   @ViewChild('input', {read: ElementRef}) inputRef: ElementRef;
   input$: Observable<string>;
   inputSub: Subscription;
-  values: string;
+  inputValue: string;
+  filteredList: any[];
+
   waitingTime = 500;
+
   @Input() placeholder: string;
-  @Output() inputEvent = new EventEmitter<string>();
+  @Input() listForFilter: any[];
+  @Input() listName: string;
+  @Output() filter = new EventEmitter();
+
   constructor() { }
-
-  ngOnInit(): void {
-
-  }
 
   ngAfterViewInit(): void {
 
@@ -30,13 +33,30 @@ export class InputFilterComponent implements OnInit, OnDestroy, AfterViewInit {
     );
 
     this.inputSub = this.input$.subscribe(values => {
-      this.values = values;
+      this.inputValue = values;
     });
   }
 
-  onInput(event): void {
+  onInput(): void {
     setTimeout(() => {
-      this.inputEvent.emit(this.values);
+      if (this.listName !== 'connections') {
+        this.filteredList = this.listForFilter.filter(item => {
+          const regexp = new RegExp(this.inputValue.toUpperCase());
+          return item.name.toUpperCase().match(regexp);
+        });
+      } else {
+        this.filteredList = this.listForFilter.filter(item => {
+          const regexp = new RegExp(this.inputValue.toUpperCase());
+          return (item.ip.toUpperCase().match(regexp) ||
+            item.login.toUpperCase().match(regexp) ||
+            item.pswd.toUpperCase().match(regexp));
+        });
+      }
+      const result = {
+        name: this.listName,
+        list: this.filteredList
+      };
+      this.filter.emit(result);
     }, this.waitingTime + 100);
   }
 

@@ -51,36 +51,23 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
     this.getClients();
   }
 
-  onInputClient(inputValues): void {
-    this.currentClients = this.clientService.clients.filter(client => {
-      const regexp = new RegExp(inputValues.toUpperCase());
-      return client.name.toUpperCase().match(regexp);
-    });
+  onInput(result): void {
+    console.log(result);
+    switch (result.name) {
+      case 'clients':
+        this.currentClients = result.list;
+        break;
+      case 'connections':
+        this.currentConnectionsCWW = result.list;
+        break;
+      case 'locations':
+        this.currentLocations = result.list;
+        break;
+      case 'departments':
+        this.currentDepartments = result.list;
+        break;
+    }
   }
-
-  onInputConnection(inputValues): void {
-    this.currentConnectionsCWW = this.clientService.connectionsCWW.filter(connection => {
-      const regexp = new RegExp(inputValues.toUpperCase());
-      return (connection.ip.toUpperCase().match(regexp) ||
-              connection.login.toUpperCase().match(regexp) ||
-              connection.pswd.toUpperCase().match(regexp));
-    });
-  }
-
-  onInputLocation(inputValues): void {
-    this.currentLocations = this.clientService.locations.filter(location => {
-      const regexp = new RegExp(inputValues.toUpperCase());
-      return location.name.toUpperCase().match(regexp);
-    });
-  }
-
-  onInputDepartment(inputValues): void {
-    this.currentDepartments = this.clientService.departments.filter(location => {
-      const regexp = new RegExp(inputValues.toUpperCase());
-      return location.name.toUpperCase().match(regexp);
-    });
-  }
-
 
   openPopup(params): void {
     const dialogRef = this.matDialog.open(PopupComponent, {data: params});

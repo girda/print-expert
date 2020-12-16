@@ -11,7 +11,7 @@ export class KeysService {
       name: 'Адміністратор'
     },
     user: {
-      id: 0,
+      id: 3,
       name: 'Користувач'
     },
     client: {
