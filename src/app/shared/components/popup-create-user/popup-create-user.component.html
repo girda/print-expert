@@ -4,7 +4,7 @@
   (ngSubmit)="onSubmit()"
 >
 
-  <h3 class="form__title">Новий користувач</h3>
+  <h3 class="form__title">{{isEdit ? 'Редагувати користувача' : 'Новий користувач'}}</h3>
 
   <mat-form-field class="form__row">
     <mat-label>Логін *</mat-label>
@@ -91,11 +91,10 @@
     </button>
     <button
       type="submit"
-      [disabled]="form.invalid || form.disabled"
       mat-raised-button
       color="primary"
     >
-      Створити
+      {{isEdit ? 'Зберегти' : 'Створити'}}
     </button>
   </div>
 

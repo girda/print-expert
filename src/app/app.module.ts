@@ -86,7 +86,7 @@ import { InputFilterComponent } from './shared/components/input-filter/input-fil
   providers: [
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'ua'
+      useValue: 'uk-UA'
     },
     {
       provide: HTTP_INTERCEPTORS,

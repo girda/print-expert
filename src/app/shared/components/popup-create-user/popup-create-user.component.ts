@@ -21,6 +21,9 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
 
   flagHiddenClient = true;
 
+  isEdit = false;
+  userId: number;
+
   constructor(private keys: KeysService,
               public dialogRef: MatDialogRef<PopupCreateUserComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
@@ -55,6 +58,9 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       );
+
+    this.isEdit = this.data.isEdit;
+    this.userId = this.data.id;
   }
 
   onCancel(): void {
@@ -73,20 +79,37 @@ export class PopupCreateUserComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.form.disable();
-    const formData = this.form.value;
-    formData.password = sha256(formData.password);
-
-    this.userService.create(formData)
-      .subscribe(
-        res => {
-          this.dialogRef.close();
-          alert(res.message);
-        },
-        error => {
-          console.log(error);
-        }
-      );
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+    } else {
+      this.form.disable();
+      const formData = this.form.value;
+      formData.password = sha256(formData.password);
+      console.log(formData);
+      if (this.isEdit) {
+        this.userService.update(formData, this.userId)
+          .subscribe(
+            res => {
+              this.dialogRef.close();
+              alert(res.message);
+            },
+            error => {
+              console.log(error);
+            }
+          );
+      } else {
+        this.userService.create(formData)
+          .subscribe(
+            res => {
+              this.dialogRef.close();
+              alert(res.message);
+            },
+            error => {
+              console.log(error);
+            }
+          );
+      }
+    }
   }
 
   ngOnDestroy(): void {

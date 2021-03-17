@@ -111,7 +111,13 @@ export class ClientsPageComponent implements OnInit, OnDestroy {
 
   delete(event: Event, candidate: any, route: string): void {
     event.stopPropagation();
-    const decision = window.confirm(`Ви впевнені, що хочете видалити "${candidate.name ? candidate.name : candidate.ip}"?`);
+    let decision;
+
+    if (candidate.ip) {
+      decision = window.confirm(`Будуть видалені дані по всім принтерам цього підключення за всі періоди! Дію не можна буде відмінити! Ви впевнені, що хочете видалити підключення CWW "${candidate.ip}"?`);
+    } else {
+      decision = window.confirm(`Ви впевнені, що хочете видалити "${candidate.name}"?`);
+    }
 
     if (decision) {
       this.clientService.delete(candidate.id, route).subscribe(

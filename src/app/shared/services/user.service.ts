@@ -57,4 +57,12 @@ export class UserService implements IUser {
   create(user: IUser): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/api/users`, user);
   }
+
+  update(user: IUser, id: number): Observable<any> {
+    return this.http.patch<any>(`${environment.apiUrl}/api/users/${id}`, user);
+  }
+
+  delete(id: number): Observable<any> {
+    return this.http.delete<any>(`${environment.apiUrl}/api/users/${id}`);
+  }
 }

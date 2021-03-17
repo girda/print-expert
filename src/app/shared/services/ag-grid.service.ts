@@ -39,11 +39,11 @@ export class AgGridService {
   init(url: string, params): void {
     console.log(params);
     this.gridOptions.onGridReady = () => {
-      this.gridOptions.api.sizeColumnsToFit();
       this.rest.post(url, params).subscribe(
         rowData => {
           console.log(rowData);
           this.gridOptions.api.setRowData(rowData);
+          this.gridOptions.api.sizeColumnsToFit();
         },
         error => {
           console.log(error);

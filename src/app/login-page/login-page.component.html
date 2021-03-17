@@ -6,11 +6,11 @@
   >
     <h2 class="form__title">Увійти до системи</h2>
     <mat-form-field class="form__row">
-      <mat-label>Логин</mat-label>
+      <mat-label>Логін</mat-label>
       <input
         matInput
         formControlName="login"
-        placeholder="Логин"
+        placeholder="Логін"
       >
       <mat-error *ngIf="form.get('login').invalid && form.get('password').touched">
         <mat-error *ngIf="form.get('login').errors['required']">Логин не повинен бути порожнім</mat-error>

@@ -126,7 +126,7 @@ export class FilterPrintersComponent implements OnInit, OnDestroy {
   getTable(): void {
     this.printerService.paramsForGetTable = this.formFilters.value;
     const params = this.formFilters.value;
-
+    console.log(params);
     if (this.userService.getRole() === this.keys.roles.client.id) {
       params.client = this.userService.getClient();
     }

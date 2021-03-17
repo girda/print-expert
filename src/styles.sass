@@ -14,22 +14,58 @@ body
 .grid-cell-border
   border-left: 1px solid #cfd2ce
 
-.pseudo-black, .pseudo-cyan, .pseudo-magenta, .pseudo-yellow
-  &:after
+.grid-cell-icon
+  display: flex
+  justify-content: center
+  & > span
+    display: flex
+    align-items: center
+    & > svg
+      width: 22px
+      height: 22px
+
+//.pseudo-black, .pseudo-cyan, .pseudo-magenta, .pseudo-yellow
+//  &:after
+//    content: ''
+//    position: absolute
+//    bottom: 0
+//    left: 0
+//    width: 70px
+//    height: 6px
+//    background-color: black
+.pseudo-black
+  border-bottom: 6px solid black
+.pseudo-cyan
+  border-bottom: 6px solid #00FFFF
+.pseudo-magenta
+  border-bottom: 6px solid #FF00FF
+.pseudo-yellow
+  border-bottom: 6px solid yellow
+.pseudo-color
+  border-bottom: 6px solid #FF00FF
+  &:after, &:before
     content: ''
     position: absolute
-    bottom: 0
+    bottom: -6px
     left: 0
-    width: 70px
+    width: 33%
     height: 6px
-    background-color: black
-.pseudo-cyan:after
-  background-color: #00FFFF
-.pseudo-magenta:after
-  background-color: #FF00FF
+    background-color: #00FFFF
+  &:after
+    left: auto
+    right: 0
+    background-color: yellow
 
-.pseudo-yellow:after
-  background-color: yellow
+.full-width-panel
+  /* undo the white-space setting Fresh puts in */
+  white-space: normal
+  height: 100%
+  width: 100%
+  border: 2px solid grey
+  box-sizing: border-box
+  padding: 5px
+  background-color: darkgray
+
 .mat-form-field-appearance-fill .mat-form-field-flex
   background-color: transparent
 .container

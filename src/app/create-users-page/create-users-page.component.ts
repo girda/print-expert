@@ -26,7 +26,9 @@ export class CreateUsersPageComponent implements OnInit, OnDestroy {
 
   openEditPopup(user): void {
     console.log(user);
+    user.isEdit = true;
     console.log(user.role);
+    console.log(user);
     const dialogRef = this.matDialog.open(PopupCreateUserComponent, {data: user});
 
     this.dialogEditSubscription = dialogRef.afterClosed().subscribe(
@@ -34,6 +36,24 @@ export class CreateUsersPageComponent implements OnInit, OnDestroy {
         this.getUsers();
       }
     );
+  }
+
+  deleteUser(event: Event, user): void {
+    event.stopPropagation();
+    const decision = window.confirm(`Ви впевнені, що хочете видалити "${user.login}"?`);
+    console.log(user);
+    if (decision) {
+      this.userService.delete(user.id).subscribe(
+        res => {
+          alert(res.message);
+          this.getUsers();
+          console.log(res);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    }
   }
 
   openPopup(): void {

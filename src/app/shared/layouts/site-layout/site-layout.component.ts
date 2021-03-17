@@ -13,7 +13,7 @@ export class SiteLayoutComponent implements OnInit {
 
   links: any[] = [
     {name: 'Принтери', url: 'printers'},
-    {name: 'Кліенти', url: 'clients'},
+    {name: 'Клієнти', url: 'clients'},
     {name: 'Користувачі', url: 'create-users'},
     {name: 'Налаштування', url: 'settings'}
   ];

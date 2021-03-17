@@ -121,10 +121,61 @@ export class PrinterService {
             width: 70
           },
           {
-            headerName: 'К-сть сторінок',
-            field: 'page_count',
-            headerTooltip: 'Кількість роздрукованих сторінок'
-          }]
+            headerName: 'Статус',
+            field: 'absent_text',
+            headerTooltip: 'Статус',
+            cellClass: 'grid-cell-icon',
+            tooltipValueGetter: params => {
+              if (params.value) {
+                return 'За принтером не зібрані дані за датами: ' + params.value;
+              } else {
+                return 'Дані зібрано за всі дати періоду.';
+              }
+
+            },
+            cellRenderer: params => {
+              console.log(params);
+              let icon: string;
+              if (params.value) {
+                icon = '<svg height="32" ' +
+                  'style="overflow: visible; enable-background: new 0 0 32 32" viewBox="0 0 32 32" width="32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><g id="Error_1_"><g id="Error"><circle cx="16" cy="16" id="BG" r="16" style="fill:#D72828;"/><path d="M14.5,25h3v-3h-3V25z M14.5,6v13h3V6H14.5z" id="Exclamatory_x5F_Sign" style="fill:#E6E6E6;"/></g></g></g></svg>';
+              } else {
+                icon = '<svg height="32" style="overflow: visible; enable-background: new 0 0 32 32" viewBox="0 0 32 32" width="32" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" ><g><g id="Complete_x5F_Symbol_1_"><g id="Complete_x5F_Symbol"><circle cx="16" cy="16" id="BG" r="16" style="fill:#19D873;"/><polygon id="Done_x5F_Symbol" points="14,17.9 14,17.9 14,17.9 10.1,14 8,16.1         14,22.1 24,12.1 21.9,10 " style="fill:#E6E6E6;"/></g></g></g></svg>';
+              }
+              return icon;
+            },
+            width: 70
+          }
+        ]
+      },
+      {
+        headerName: 'Сторінок',
+        headerTooltip: 'Кількість роздрукованих сторінок',
+        headerClass: 'grid-cell-centered grid-cell-border',
+        children: [
+          {
+            headerName: 'Всього',
+            headerClass: 'grid-cell-centered',
+            cellStyle: {textAlign: 'center'},
+            field: 'page_count_all',
+            columnGroupShow: 'closed',
+            width: 100
+          },
+          {
+            headerName: 'Чорні',
+            headerClass: 'grid-cell-centered',
+            cellStyle: {textAlign: 'center'},
+            field: 'page_count_bk',
+            columnGroupShow: 'open'
+          },
+          {
+            headerName: 'Кольорові',
+            headerClass: 'grid-cell-centered',
+            cellStyle: {textAlign: 'center'},
+            field: 'page_count_col',
+            columnGroupShow: 'open'
+          }
+        ]
       },
       {
         headerName: 'Кількість замін картриджів',
@@ -132,32 +183,44 @@ export class PrinterService {
         headerTooltip: 'Кількість замін картриджів',
         children: [
           {
+            headerName: 'Всього',
+            headerClass: 'grid-cell-centered',
+            cellStyle: {textAlign: 'center'},
+            field: 'quantity_all',
+            columnGroupShow: 'closed',
+            width: 100
+          },
+          {
             headerName: 'Black',
             headerClass: 'grid-cell-centered pseudo-black',
             field: 'quantity_black',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
           {
             headerName: 'CN',
             headerClass: 'grid-cell-centered pseudo-cyan',
             field: 'quantity_cn',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
           {
             headerName: 'MG',
             headerClass: 'grid-cell-centered pseudo-magenta',
             field: 'quantity_mg',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
           {
             headerName: 'YL',
             headerClass: 'grid-cell-centered pseudo-yellow',
             field: 'quantity_yl',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
         ]
       },
@@ -210,28 +273,39 @@ export class PrinterService {
             headerClass: 'grid-cell-centered pseudo-black',
             field: 'average_coverage_bk',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+          },
+          {
+            headerName: 'Color',
+            headerClass: 'grid-cell-centered pseudo-color',
+            field: 'average_coverage_all_color',
+            width: 70,
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'closed'
           },
           {
             headerName: 'CN',
             headerClass: 'grid-cell-centered pseudo-cyan',
             field: 'average_coverage_cn',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
           {
             headerName: 'MG',
             headerClass: 'grid-cell-centered pseudo-magenta',
             field: 'average_coverage_mg',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
           {
             headerName: 'YL',
             headerClass: 'grid-cell-centered pseudo-yellow',
             field: 'average_coverage_yl',
             width: 70,
-            cellStyle: {textAlign: 'center'}
+            cellStyle: {textAlign: 'center'},
+            columnGroupShow: 'open'
           },
           {
             headerName: 'Всього',

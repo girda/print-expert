@@ -29,8 +29,12 @@
                 <span>{{ user.email }}</span>
                 <span>{{ user.name }}</span>
 
-                <button mat-icon-button (click)="openEditPopup(user)" title="Редагувати">
+                <button mat-icon-button (click)="openEditPopup(user)" class="create-users__edit" title="Редагувати">
                   <img src="/assets/icons/pen.svg" alt="Редагувати">
+                </button>
+
+                <button mat-icon-button (click)="deleteUser($event, user)" class="create-users__delete" title="Видалити">
+                  <img src="/assets/icons/close.svg">
                 </button>
               </div>
 
